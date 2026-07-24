@@ -8,11 +8,60 @@ const { label = false, class: className } = Astro.props;
 ---
 
 <span class:list={["core-mark", className]} aria-hidden="true">
-  <svg viewBox="0 0 64 64" role="img">
-    <circle cx="32" cy="32" r="30.5"></circle>
-    <circle cx="32" cy="32" r="13"></circle>
-    <path d="M32 1.5v17.5M32 45v17.5M1.5 32H19M45 32h17.5"></path>
-    <circle class="core-mark__dot" cx="32" cy="32" r="2.5"></circle>
+  <svg viewBox="0 0 1024 1024" role="img">
+    <g class="core-mark__wordmark">
+      <text x="230" y="302" transform="rotate(-43 230 302)">L</text>
+      <text x="271" y="267" transform="rotate(-36 271 267)">U</text>
+      <text x="315" y="239" transform="rotate(-28 315 239)">D</text>
+      <text x="357" y="218" transform="rotate(-19 357 218)">I</text>
+      <text x="398" y="203" transform="rotate(-12 398 203)">C</text>
+      <text x="468" y="189" transform="rotate(-4 468 189)">C</text>
+      <text x="518" y="187" transform="rotate(2 518 187)">O</text>
+      <text x="570" y="194" transform="rotate(8 570 194)">R</text>
+      <text x="620" y="207" transform="rotate(15 620 207)">E</text>
+      <text x="686" y="237" transform="rotate(25 686 237)">L</text>
+      <text x="732" y="266" transform="rotate(33 732 266)">A</text>
+      <text x="774" y="302" transform="rotate(40 774 302)">B</text>
+    </g>
+
+    <g class="core-mark__orbit core-mark__orbit--outer">
+      <path d="M158 382 L207 316"></path>
+      <path d="M814 317 Q865 366 889 440"></path>
+      <path d="M873 370 Q948 363 931 410 Q920 441 894 465"></path>
+      <path d="M862 502 Q813 555 752 587"></path>
+      <path d="M786 725 Q744 807 648 850"></path>
+      <path d="M612 874 Q560 892 510 893"></path>
+      <path d="M236 689 Q273 761 347 802"></path>
+    </g>
+
+    <g class="core-mark__dots">
+      <circle cx="879" cy="482" r="14"></circle>
+      <circle cx="629" cy="864" r="10"></circle>
+      <circle cx="386" cy="823" r="10"></circle>
+    </g>
+
+    <g class="core-mark__orbit core-mark__orbit--inner">
+      <path class="core-mark__arc" d="M291 375 Q512 141 733 375"></path>
+      <path
+        class="core-mark__arc"
+        d="M279 689 Q371 838 514 841 Q658 843 748 703"
+      ></path>
+      <path class="core-mark__arc" d="M278 690 Q310 741 362 773"></path>
+      <path d="M407 829 Q505 858 608 829"></path>
+    </g>
+
+    <g class="core-mark__letters">
+      <path d="M214 395 H273 L227 566 L177 609 L148 673 H120 L185 437 Z">
+      </path>
+      <path d="M179 610 H360 L429 700 H407 L386 673 H163 Z"></path>
+      <path
+        d="M463 395 H668 L644 449 H482 L452 474 L424 575 L449 610
+          H599 L582 673 H407 L371 586 H349 L383 464 Z"
+      ></path>
+      <path d="M701 395 H760 L706 597 L646 648 L633 657 H608 L676 423 Z">
+      </path>
+      <path d="M707 610 H879 L927 673 H608 L633 658 L646 658 Z"></path>
+    </g>
   </svg>
   {label && <span>LCL</span>}
 </span>
@@ -23,6 +72,7 @@ const { label = false, class: className } = Astro.props;
     align-items: center;
     gap: 0.65rem;
     flex: 0 0 auto;
+    container: core-mark / inline-size;
   }
 
   svg {
@@ -31,22 +81,106 @@ const { label = false, class: className } = Astro.props;
     overflow: visible;
   }
 
-  circle,
-  path {
+  .core-mark__wordmark,
+  .core-mark__letters,
+  .core-mark__dots {
+    fill: currentColor;
+  }
+
+  text {
+    font-family: "Arial Narrow", "Liberation Sans Narrow", Arial, sans-serif;
+    font-size: 46px;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .core-mark__orbit {
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.5;
+    stroke-width: 6;
+    stroke-linecap: butt;
     vector-effect: non-scaling-stroke;
   }
 
-  .core-mark__dot {
-    fill: currentColor;
-    stroke: none;
+  .core-mark__orbit--inner .core-mark__arc {
+    stroke-width: 16;
   }
 
-  span {
+  .core-mark__orbit--inner .core-mark__arc:nth-child(3) {
+    stroke-width: 14;
+  }
+
+  .core-mark__wordmark,
+  .core-mark__orbit,
+  .core-mark__dots {
+    transform-origin: 512px 512px;
+    transform-box: view-box;
+    will-change: transform;
+  }
+
+  .core-mark > span {
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.12em;
+  }
+
+  /*
+   * Keep compact navigation marks still. Any rendered mark at least 5rem wide
+   * animates automatically, so the rule applies consistently across pages.
+   */
+  @container core-mark (min-width: 5rem) {
+    .core-mark__wordmark {
+      animation: core-mark-turn 42s linear infinite;
+    }
+
+    .core-mark__orbit--outer {
+      animation: core-mark-turn-reverse 34s linear infinite;
+    }
+
+    .core-mark__orbit--inner {
+      animation: core-mark-orbit-breathe 5.4s ease-in-out infinite;
+    }
+
+    .core-mark__dots {
+      animation:
+        core-mark-turn-reverse 34s linear infinite,
+        dots-breathe 3.2s ease-in-out infinite;
+    }
+  }
+
+  @keyframes core-mark-turn {
+    from {
+      transform: rotate(0turn);
+    }
+
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  @keyframes core-mark-turn-reverse {
+    from {
+      transform: rotate(0turn);
+    }
+
+    to {
+      transform: rotate(-1turn);
+    }
+  }
+
+  @keyframes dots-breathe {
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  /*
+   * The thick arcs are composed around the fixed LCL letters. Rotating them
+   * moves their ends through the letters, so they only breathe outwards.
+   */
+  @keyframes core-mark-orbit-breathe {
+    50% {
+      transform: scale(1.025);
+    }
   }
 </style>

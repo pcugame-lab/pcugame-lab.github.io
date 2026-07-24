@@ -1,0 +1,303 @@
+---
+import CoreMark from "./CoreMark.astro";
+
+interface HeroLine {
+  word: string;
+  suffix: string;
+  annotation: string;
+}
+
+interface Props {
+  lines: HeroLine[];
+  lead: string;
+}
+
+const { lines, lead } = Astro.props;
+const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join(" ");
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero__grid" aria-hidden="true"></div>
+  <CoreMark class="hero__core" />
+
+  <div class="hero__meta">
+    <p>LCL / Ludic Core Laboratory</p>
+    <p>Game Design Research</p>
+  </div>
+
+  <h1 id="hero-title" class="hero__title" aria-label={accessibleTitle}>
+    {
+      lines.map((line, index) => (
+        <span class={`hero__line hero__line--${index + 1}`} aria-hidden="true">
+          <span class="hero__word">
+            {line.word}
+            <em>{line.annotation}</em>
+          </span>
+          {line.suffix && <span class="hero__suffix">{line.suffix}</span>}
+        </span>
+      ))
+    }
+  </h1>
+
+  <div class="hero__bottom">
+    <p>{lead}</p>
+    <a href="#introduction">
+      <span>Scroll to discover</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3v17M5 13l7 7 7-7"></path>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    min-height: calc(100svh - var(--header-height));
+    padding: clamp(1.25rem, 2vw, 2rem) var(--page-gutter)
+      clamp(1.5rem, 3vw, 3rem);
+    color: var(--white);
+    background: var(--ink);
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__grid {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    opacity: 0.5;
+    background-image:
+      linear-gradient(to right, #1b1b1b 1px, transparent 1px),
+      linear-gradient(to bottom, #1b1b1b 1px, transparent 1px);
+    background-size: min(10vw, 9rem) min(10vw, 9rem);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 92%);
+  }
+
+  .hero::after {
+    position: absolute;
+    z-index: -1;
+    right: -4vw;
+    bottom: -18vw;
+    width: 58vw;
+    aspect-ratio: 1;
+    border: 1px solid #333;
+    border-radius: 50%;
+    content: "";
+  }
+
+  :global(.hero__core) {
+    position: absolute;
+    z-index: -1;
+    top: 16%;
+    right: 8%;
+    width: clamp(13rem, 26vw, 31rem);
+    height: clamp(13rem, 26vw, 31rem);
+    color: #292929;
+    animation: core-turn 32s linear infinite;
+  }
+
+  .hero__meta {
+    display: flex;
+    justify-content: space-between;
+    color: #747470;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero__meta p {
+    margin: 0;
+  }
+
+  .hero__title {
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    max-width: var(--content-width);
+    margin: clamp(2rem, 4vh, 4rem) auto;
+    align-self: center;
+    flex-direction: column;
+    font-size: clamp(5.1rem, 12.5vw, 14rem);
+    font-weight: 700;
+    line-height: 0.72;
+    letter-spacing: -0.095em;
+  }
+
+  .hero__line {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .hero__line--2 {
+    margin-left: 19vw;
+  }
+
+  .hero__line--3 {
+    margin-top: 0.09em;
+    margin-left: 5vw;
+  }
+
+  .hero__word {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .hero__word em {
+    position: absolute;
+    top: 12%;
+    right: -0.75rem;
+    font-size: clamp(0.58rem, 0.65vw, 0.8rem);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.13em;
+    transform: translateX(100%);
+    text-transform: uppercase;
+  }
+
+  .hero__word em::before {
+    display: inline-block;
+    width: 1.6rem;
+    height: 1px;
+    margin-right: 0.55rem;
+    background: currentColor;
+    vertical-align: middle;
+    content: "";
+  }
+
+  .hero__suffix {
+    margin-left: 0.14em;
+    font-size: 0.27em;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+  }
+
+  .hero__bottom {
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    max-width: var(--content-width);
+    margin-inline: auto;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .hero__bottom > p {
+    max-width: 34rem;
+    margin: 0;
+    color: #c1c1bc;
+    font-size: clamp(0.92rem, 1.2vw, 1.1rem);
+    line-height: 1.7;
+    word-break: keep-all;
+  }
+
+  .hero__bottom a {
+    display: inline-flex;
+    padding: 0.9rem 0;
+    align-items: center;
+    gap: 1.25rem;
+    border-bottom: 1px solid #555;
+    color: #999;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .hero__bottom svg {
+    width: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  @keyframes core-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 60rem) {
+    .hero__title {
+      font-size: clamp(4.8rem, 15.5vw, 9rem);
+    }
+
+    .hero__line--2 {
+      margin-left: 12vw;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .hero {
+      min-height: calc(100svh - var(--header-height));
+      padding-top: 1rem;
+    }
+
+    .hero__meta p:last-child {
+      display: none;
+    }
+
+    :global(.hero__core) {
+      top: 18%;
+      right: -15%;
+      width: 65vw;
+      height: 65vw;
+    }
+
+    .hero__title {
+      margin-block: 4rem;
+      font-size: clamp(4.35rem, 21vw, 8rem);
+      line-height: 0.78;
+    }
+
+    .hero__line--2 {
+      margin-left: 0.38em;
+    }
+
+    .hero__line--3 {
+      margin-top: 0.2em;
+      margin-left: 0;
+      font-size: 0.74em;
+    }
+
+    .hero__word em {
+      top: 8%;
+      right: -0.38rem;
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .hero__word em::before {
+      width: 0.65rem;
+      margin-right: 0.35rem;
+    }
+
+    .hero__bottom {
+      align-items: start;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hero__bottom > p {
+      max-width: 27rem;
+      font-size: 0.86rem;
+    }
+
+    .hero__bottom a {
+      align-self: flex-end;
+    }
+  }
+
+  @media (max-width: 25rem) {
+    .hero__title {
+      font-size: 19vw;
+    }
+  }
+</style>

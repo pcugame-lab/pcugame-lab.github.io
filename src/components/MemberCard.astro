@@ -1,0 +1,240 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  member: CollectionEntry<"members">;
+  index?: number;
+}
+
+const { member, index = 0 } = Astro.props;
+const { data } = member;
+---
+
+<article class="member-card">
+  <div class="member-card__visual" aria-hidden="true">
+    <span>{data.monogram}</span>
+    <i></i>
+    <i></i>
+    <i></i>
+    <small>{String(index + 1).padStart(2, "0")}</small>
+  </div>
+
+  <div class="member-card__info">
+    <div class="member-card__role">
+      <span>{data.role}</span>
+      <span>{data.group}</span>
+    </div>
+    <h2>{data.name}</h2>
+    <p class="member-card__name-en">{data.nameEn}</p>
+    <div class="member-card__bio">
+      <slot />
+    </div>
+    <ul class="member-card__interests" aria-label="관심 연구 분야">
+      {data.interests.map((interest) => <li>{interest}</li>)}
+    </ul>
+    {
+      (data.github || data.website || data.email) && (
+        <div class="member-card__links">
+          {data.github && (
+            <a href={data.github} target="_blank" rel="noreferrer">
+              GitHub <span>↗</span>
+            </a>
+          )}
+          {data.website && (
+            <a href={data.website} target="_blank" rel="noreferrer">
+              Website <span>↗</span>
+            </a>
+          )}
+          {data.email && (
+            <a href={`mailto:${data.email}`}>
+              Email <span>↗</span>
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .member-card {
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.72fr) minmax(18rem, 1.28fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .member-card__visual {
+    position: relative;
+    display: grid;
+    min-height: 32rem;
+    color: var(--white);
+    background: var(--ink);
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .member-card__visual::before,
+  .member-card__visual::after {
+    position: absolute;
+    border: 1px solid #343432;
+    border-radius: 50%;
+    content: "";
+  }
+
+  .member-card__visual::before {
+    width: 70%;
+    aspect-ratio: 1;
+  }
+
+  .member-card__visual::after {
+    width: 38%;
+    aspect-ratio: 1;
+  }
+
+  .member-card__visual > span {
+    z-index: 1;
+    font-size: clamp(3.5rem, 7vw, 7.5rem);
+    font-weight: 700;
+    letter-spacing: -0.08em;
+  }
+
+  .member-card__visual i {
+    position: absolute;
+    background: #343432;
+  }
+
+  .member-card__visual i:nth-of-type(1) {
+    width: 1px;
+    height: 100%;
+  }
+
+  .member-card__visual i:nth-of-type(2) {
+    width: 100%;
+    height: 1px;
+  }
+
+  .member-card__visual i:nth-of-type(3) {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 0 0 0.55rem var(--ink), 0 0 0 0.6rem #555;
+  }
+
+  .member-card__visual small {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: #6c6c68;
+    font-size: 0.58rem;
+    font-weight: 700;
+  }
+
+  .member-card__info {
+    display: flex;
+    padding: clamp(2rem, 5vw, 5rem);
+    flex-direction: column;
+    background: var(--white);
+  }
+
+  .member-card__role {
+    display: flex;
+    margin-bottom: auto;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: clamp(4rem, 8vw, 8rem) 0 0;
+    font-size: clamp(3rem, 7vw, 7.5rem);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.075em;
+  }
+
+  .member-card__name-en {
+    margin: 0.65rem 0 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+
+  .member-card__bio {
+    max-width: 40rem;
+    color: #484844;
+    font-size: 1rem;
+    line-height: 1.75;
+    word-break: keep-all;
+  }
+
+  .member-card__bio :global(p) {
+    margin: 0;
+  }
+
+  .member-card__interests {
+    display: flex;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .member-card__interests li {
+    padding: 0.48rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .member-card__links {
+    display: flex;
+    margin-top: 2.5rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .member-card__links a {
+    display: inline-flex;
+    padding-bottom: 0.35rem;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--ink);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .member-card__links a span {
+    transition: transform 250ms ease;
+  }
+
+  .member-card__links a:hover span {
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 48rem) {
+    .member-card {
+      grid-template-columns: 1fr;
+    }
+
+    .member-card__visual {
+      min-height: 75vw;
+    }
+
+    .member-card__info {
+      min-height: 33rem;
+    }
+
+    h2 {
+      margin-top: 5rem;
+    }
+  }
+</style>

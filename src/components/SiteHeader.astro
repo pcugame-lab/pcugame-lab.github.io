@@ -1,0 +1,250 @@
+---
+import { site } from "../config/site";
+import CoreMark from "./CoreMark.astro";
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="/" aria-label="Ludic Core Laboratory 홈">
+      <CoreMark class="brand__mark" />
+      <span class="brand__name">
+        <strong>LCL</strong>
+        <span>Ludic Core<br />Laboratory</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="주요 메뉴">
+      {
+        site.nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
+          >
+            <span>{item.index}</span>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <details class="mobile-nav">
+      <summary aria-label="메뉴 열기">
+        <span>Menu</span>
+        <i></i>
+        <i></i>
+      </summary>
+      <nav aria-label="모바일 메뉴">
+        {
+          site.nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              <span>{item.index}</span>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 100;
+    height: var(--header-height);
+    color: var(--white);
+    background: var(--ink);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .site-header__inner {
+    display: flex;
+    width: min(100%, var(--content-width));
+    height: 100%;
+    margin-inline: auto;
+    padding-inline: var(--page-gutter);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :global(.brand__mark) {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .brand__name {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .brand__name strong {
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .brand__name > span {
+    padding-left: 0.75rem;
+    border-left: 1px solid #555;
+    color: #a9a9a4;
+    font-size: 0.56rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .desktop-nav {
+    display: flex;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .desktop-nav a {
+    position: relative;
+    display: flex;
+    min-width: 8.5rem;
+    padding-inline: 1.25rem;
+    align-items: center;
+    gap: 0.65rem;
+    border-left: 1px solid var(--line-dark);
+    color: #a6a6a1;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      color 200ms ease,
+      background 200ms ease;
+  }
+
+  .desktop-nav a:last-child {
+    border-right: 1px solid var(--line-dark);
+  }
+
+  .desktop-nav a span {
+    color: #666;
+    font-size: 0.58rem;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a[aria-current="page"] {
+    color: var(--white);
+    background: #121212;
+  }
+
+  .desktop-nav a[aria-current="page"]::after {
+    position: absolute;
+    right: 1.25rem;
+    bottom: -0.25rem;
+    left: 1.25rem;
+    height: 0.5rem;
+    background: var(--white);
+    content: "";
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
+  @media (max-width: 60rem) {
+    .desktop-nav {
+      display: none;
+    }
+
+    .mobile-nav {
+      display: block;
+    }
+
+    .mobile-nav summary {
+      display: grid;
+      width: 3.5rem;
+      height: 2.75rem;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      list-style: none;
+      align-content: center;
+      justify-items: end;
+    }
+
+    .mobile-nav summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-nav summary span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .mobile-nav summary i {
+      display: block;
+      width: 1.8rem;
+      height: 1px;
+      margin-block: 0.22rem;
+      background: currentColor;
+      transition: transform 200ms ease;
+    }
+
+    .mobile-nav[open] summary i:first-of-type {
+      transform: translateY(0.225rem) rotate(45deg);
+    }
+
+    .mobile-nav[open] summary i:last-of-type {
+      transform: translateY(-0.225rem) rotate(-45deg);
+    }
+
+    .mobile-nav nav {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      display: grid;
+      padding: 0 var(--page-gutter) 1.5rem;
+      color: var(--white);
+      background: var(--ink);
+      border-bottom: 1px solid var(--line-dark);
+      box-shadow: 0 1rem 2rem rgb(0 0 0 / 28%);
+    }
+
+    .mobile-nav nav a {
+      display: flex;
+      padding: 1.1rem 0;
+      gap: 1rem;
+      border-bottom: 1px solid var(--line-dark);
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .mobile-nav nav a span {
+      color: #777;
+      font-size: 0.65rem;
+    }
+
+    .mobile-nav nav a[aria-current="page"]::after {
+      margin-left: auto;
+      content: "●";
+      font-size: 0.6rem;
+    }
+  }
+</style>

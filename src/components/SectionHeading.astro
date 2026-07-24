@@ -1,0 +1,85 @@
+---
+interface Props {
+  index: string;
+  eyebrow: string;
+  title: string;
+  description?: string;
+  light?: boolean;
+}
+
+const {
+  index,
+  eyebrow,
+  title,
+  description,
+  light = false,
+} = Astro.props;
+---
+
+<header class:list={["section-heading", { "section-heading--light": light }]}>
+  <div class="section-heading__meta">
+    <span>{index}</span>
+    <p class="eyebrow">{eyebrow}</p>
+  </div>
+  <h2>{title}</h2>
+  {description && <p class="section-heading__description">{description}</p>}
+</header>
+
+<style>
+  .section-heading {
+    display: grid;
+    margin-bottom: clamp(3rem, 6vw, 6rem);
+    grid-template-columns: minmax(8rem, 0.55fr) minmax(0, 1.45fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .section-heading__meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .section-heading__meta > span {
+    color: var(--muted);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    max-width: 70rem;
+    margin: 0;
+    font-size: clamp(2.8rem, 7vw, 8rem);
+    font-weight: 600;
+    line-height: 0.93;
+    letter-spacing: -0.065em;
+    word-break: keep-all;
+  }
+
+  .section-heading__description {
+    max-width: 33rem;
+    margin: 1.5rem 0 0;
+    grid-column: 2;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    word-break: keep-all;
+  }
+
+  .section-heading--light .section-heading__description,
+  .section-heading--light .section-heading__meta > span {
+    color: #888;
+  }
+
+  @media (max-width: 48rem) {
+    .section-heading {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .section-heading__description {
+      grid-column: 1;
+    }
+  }
+</style>

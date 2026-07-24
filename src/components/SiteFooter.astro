@@ -1,0 +1,195 @@
+---
+import { site } from "../config/site";
+import CoreMark from "./CoreMark.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__top container">
+    <div class="footer-intro">
+      <p class="eyebrow">Ludic Core Laboratory</p>
+      <p class="footer-intro__title">다음 재미의 핵심을<br />함께 찾아봅시다.</p>
+    </div>
+
+    <div class="footer-links">
+      <div>
+        <p>Navigate</p>
+        {
+          site.nav.map((item) => (
+            <a href={item.href}>
+              <span>{item.index}</span>
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+      <div>
+        <p>Connect</p>
+        <a href={site.github} target="_blank" rel="noreferrer">
+          <span>↗</span>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-wordmark container" aria-label={site.name}>
+    <span>Ludic</span>
+    <CoreMark class="footer-wordmark__mark" />
+    <span>Core</span>
+    <span>Laboratory</span>
+  </div>
+
+  <div class="site-footer__bottom container">
+    <p>© {year} {site.shortName}</p>
+    <p>Researching the core of fun.</p>
+    <a href="#top" aria-label="페이지 맨 위로 이동">Back to top ↑</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    color: var(--white);
+    background: var(--ink);
+    border-top: 1px solid var(--line-dark);
+    overflow: hidden;
+  }
+
+  .site-footer__top {
+    display: grid;
+    padding-block: clamp(4.5rem, 8vw, 8rem);
+    grid-template-columns: minmax(0, 1.3fr) minmax(20rem, 0.7fr);
+    gap: 5rem;
+  }
+
+  .footer-intro__title {
+    max-width: 55rem;
+    margin: 2.5rem 0 0;
+    font-size: clamp(2.7rem, 6.4vw, 7.5rem);
+    font-weight: 600;
+    line-height: 0.97;
+    letter-spacing: -0.065em;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .footer-links > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links p {
+    width: 100%;
+    margin: 0 0 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line-dark);
+    color: #777;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .footer-links a {
+    display: flex;
+    padding-block: 0.45rem;
+    gap: 0.6rem;
+    color: #ccc;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .footer-links a:hover {
+    color: var(--white);
+  }
+
+  .footer-links a span {
+    color: #666;
+    font-size: 0.6rem;
+  }
+
+  .footer-wordmark {
+    display: grid;
+    padding-block: 1.2rem 2.5rem;
+    align-items: center;
+    grid-template-columns: auto auto auto;
+    border-top: 1px solid var(--line-dark);
+    font-size: clamp(4rem, 11.2vw, 13rem);
+    font-weight: 700;
+    line-height: 0.72;
+    letter-spacing: -0.085em;
+  }
+
+  .footer-wordmark > span:nth-of-type(2) {
+    justify-self: end;
+  }
+
+  .footer-wordmark > span:last-child {
+    grid-column: 1 / -1;
+    margin-top: 0.25em;
+    color: transparent;
+    -webkit-text-stroke: 1px #555;
+  }
+
+  :global(.footer-wordmark__mark) {
+    width: clamp(3rem, 6vw, 7rem);
+    height: clamp(3rem, 6vw, 7rem);
+    margin-inline: 0.25em;
+  }
+
+  .site-footer__bottom {
+    display: grid;
+    padding-block: 1.5rem 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    border-top: 1px solid var(--line-dark);
+    color: #777;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .site-footer__bottom p {
+    margin: 0;
+  }
+
+  .site-footer__bottom p:nth-child(2) {
+    text-align: center;
+  }
+
+  .site-footer__bottom a {
+    justify-self: end;
+    text-decoration: none;
+  }
+
+  @media (max-width: 48rem) {
+    .site-footer__top {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+
+    .footer-wordmark {
+      grid-template-columns: auto auto auto;
+      font-size: 19vw;
+    }
+
+    .site-footer__bottom {
+      grid-template-columns: 1fr auto;
+    }
+
+    .site-footer__bottom p:nth-child(2) {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,138 @@
+---
+type Visual = "orbit" | "grid" | "wave";
+
+interface Props {
+  visual: Visual;
+  label: string;
+}
+
+const { visual, label } = Astro.props;
+---
+
+<div class:list={["project-visual", `project-visual--${visual}`]}>
+  <span class="sr-only">{label} 추상 그래픽</span>
+  {
+    visual === "orbit" && (
+      <svg viewBox="0 0 800 500" aria-hidden="true">
+        <circle class="orbit-main" cx="400" cy="250" r="128" />
+        <ellipse cx="400" cy="250" rx="300" ry="94" />
+        <ellipse
+          class="orbit-tilt"
+          cx="400"
+          cy="250"
+          rx="286"
+          ry="80"
+          transform="rotate(-35 400 250)"
+        />
+        <path d="M0 250h800M400 0v500" />
+        <circle class="solid" cx="658" cy="158" r="12" />
+        <circle class="pulse" cx="400" cy="250" r="7" />
+      </svg>
+    )
+  }
+  {
+    visual === "grid" && (
+      <svg viewBox="0 0 800 500" aria-hidden="true">
+        <path d="M80 60v380M160 60v380M240 60v380M320 60v380M400 60v380M480 60v380M560 60v380M640 60v380M720 60v380" />
+        <path d="M40 100h720M40 175h720M40 250h720M40 325h720M40 400h720" />
+        <rect class="solid" x="321" y="176" width="158" height="148" />
+        <path class="reverse" d="M347 292l53-86 53 86z" />
+        <circle class="reverse" cx="400" cy="250" r="12" />
+      </svg>
+    )
+  }
+  {
+    visual === "wave" && (
+      <svg viewBox="0 0 800 500" aria-hidden="true">
+        <path d="M0 250C80 80 120 420 200 250S320 80 400 250s120 170 200 0 120-170 200 0" />
+        <path class="wave-offset" d="M0 250C80 130 120 370 200 250s120-120 200 0 120 120 200 0 120-120 200 0" />
+        <path d="M0 250h800M400 0v500" />
+        <circle class="solid" cx="400" cy="250" r="14" />
+        <circle cx="400" cy="250" r="82" />
+      </svg>
+    )
+  }
+  <span class="project-visual__label">LCL / {label}</span>
+</div>
+
+<style>
+  .project-visual {
+    position: relative;
+    aspect-ratio: 1.45;
+    color: var(--white);
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  path,
+  circle,
+  ellipse,
+  rect {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    transition:
+      transform 700ms var(--ease-out),
+      opacity 400ms ease;
+    transform-origin: center;
+  }
+
+  .solid {
+    fill: currentColor;
+  }
+
+  .reverse {
+    fill: var(--ink);
+    stroke: var(--ink);
+  }
+
+  .orbit-main {
+    stroke-width: 2;
+  }
+
+  .orbit-tilt,
+  .wave-offset {
+    stroke-dasharray: 4 8;
+  }
+
+  .pulse {
+    fill: currentColor;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  .project-visual__label {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.85rem;
+    color: #777;
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  :global(a:hover) .project-visual--orbit .orbit-tilt {
+    transform: rotate(18deg);
+  }
+
+  :global(a:hover) .project-visual--grid rect {
+    transform: rotate(8deg) scale(0.88);
+  }
+
+  :global(a:hover) .project-visual--wave .wave-offset {
+    transform: translateY(-1.2rem);
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.25;
+      transform: scale(2.5);
+    }
+  }
+</style>

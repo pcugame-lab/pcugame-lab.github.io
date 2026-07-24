@@ -1,0 +1,226 @@
+---
+import { render } from "astro:content";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLabProfile } from "../lib/content";
+
+const lab = await getLabProfile();
+const { Content } = await render(lab);
+---
+
+<BaseLayout title="연구실 소개" description={lab.data.lead}>
+  <PageHero
+    index="01"
+    eyebrow={lab.data.eyebrow}
+    title="연구실"
+    titleEn="About the Lab"
+    description={lab.data.lead}
+  />
+
+  <section class="manifesto section">
+    <div class="container">
+      <p class="manifesto__label">Our Point of View</p>
+      <p class="manifesto__statement">{lab.data.statement}</p>
+      <dl class="manifesto__facts">
+        {
+          lab.data.facts.map((fact) => (
+            <div>
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="about-copy section">
+    <div class="about-copy__inner container">
+      <aside>
+        <span>01 — 03</span>
+        <p class="eyebrow">LCL Manifesto</p>
+      </aside>
+      <article class="prose">
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  <section class="principles section section--dark">
+    <div class="container">
+      <SectionHeading
+        index="02"
+        eyebrow="Our Process"
+        title="연구가 플레이가 되는 세 단계."
+        light
+      />
+      <div class="principles__grid">
+        {
+          lab.data.principles.map((principle, index) => (
+            <article>
+              <div>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span>{principle.label}</span>
+              </div>
+              <h2>{principle.title}</h2>
+              <p>{principle.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .manifesto {
+    background: var(--white);
+  }
+
+  .manifesto__label {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .manifesto__statement {
+    max-width: 90rem;
+    margin: 0;
+    font-size: clamp(3rem, 7.8vw, 9rem);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.07em;
+    word-break: keep-all;
+  }
+
+  .manifesto__facts {
+    display: grid;
+    margin: clamp(5rem, 10vw, 10rem) 0 0;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .manifesto__facts > div {
+    padding: 1.5rem 1.5rem 0 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .manifesto__facts > div:not(:first-child) {
+    padding-left: 1.5rem;
+  }
+
+  .manifesto__facts > div:last-child {
+    border-right: 0;
+  }
+
+  .manifesto__facts dt {
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .manifesto__facts dd {
+    margin: 0;
+    font-size: clamp(1rem, 1.7vw, 1.5rem);
+    line-height: 1.35;
+  }
+
+  .about-copy {
+    background: var(--paper);
+  }
+
+  .about-copy__inner {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.5fr) minmax(0, 1.5fr);
+    gap: 3rem;
+  }
+
+  .about-copy aside {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 700;
+  }
+
+  .about-copy aside p {
+    color: var(--ink);
+  }
+
+  .principles__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line-dark);
+    border-left: 1px solid var(--line-dark);
+  }
+
+  .principles article {
+    display: flex;
+    min-height: 34rem;
+    padding: 1.75rem;
+    flex-direction: column;
+    border-right: 1px solid var(--line-dark);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .principles article > div {
+    display: flex;
+    justify-content: space-between;
+    color: #777;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .principles h2 {
+    margin: auto 0 1.5rem;
+    font-size: clamp(3rem, 6vw, 7rem);
+    font-weight: 600;
+    line-height: 0.85;
+    letter-spacing: -0.07em;
+  }
+
+  .principles article > p {
+    max-width: 25rem;
+    margin: 0;
+    color: #aaa;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    word-break: keep-all;
+  }
+
+  @media (max-width: 48rem) {
+    .manifesto__facts {
+      grid-template-columns: 1fr;
+    }
+
+    .manifesto__facts > div,
+    .manifesto__facts > div:not(:first-child) {
+      padding: 1.5rem 0 2rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .about-copy__inner {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+
+    .principles__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .principles article {
+      min-height: 27rem;
+    }
+  }
+</style>

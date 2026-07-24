@@ -1,0 +1,52 @@
+---
+interface Props {
+  label?: boolean;
+  class?: string;
+}
+
+const { label = false, class: className } = Astro.props;
+---
+
+<span class:list={["core-mark", className]} aria-hidden="true">
+  <svg viewBox="0 0 64 64" role="img">
+    <circle cx="32" cy="32" r="30.5"></circle>
+    <circle cx="32" cy="32" r="13"></circle>
+    <path d="M32 1.5v17.5M32 45v17.5M1.5 32H19M45 32h17.5"></path>
+    <circle class="core-mark__dot" cx="32" cy="32" r="2.5"></circle>
+  </svg>
+  {label && <span>LCL</span>}
+</span>
+
+<style>
+  .core-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex: 0 0 auto;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  circle,
+  path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .core-mark__dot {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  span {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+</style>

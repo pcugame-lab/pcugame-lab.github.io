@@ -1,0 +1,98 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getProjects } from "../../lib/content";
+
+const projects = await getProjects();
+---
+
+<BaseLayout
+  title="연구 및 프로젝트"
+  description="Ludic Core Laboratory의 연구 질문과 플레이 가능한 프로젝트를 소개합니다."
+>
+  <PageHero
+    index="02"
+    eyebrow="Research & Projects"
+    title="연구"
+    titleEn="Questions in Play"
+    description="재미를 만드는 작은 단서를 관찰하고, 구체적인 시스템과 플레이 가능한 프로토타입으로 검증합니다."
+  />
+
+  <section class="research-index section">
+    <div class="container">
+      <header class="research-index__header">
+        <p class="eyebrow">All Projects</p>
+        <p>
+          각 연구 항목은 독립된 Markdown 파일입니다.<br />
+          파일을 추가하면 이 목록과 상세 페이지가 함께 생성됩니다.
+        </p>
+      </header>
+
+      <div class="research-index__grid">
+        {
+          projects.map((project, index) => (
+            <ProjectCard project={project} index={index} />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .research-index {
+    background: var(--white);
+  }
+
+  .research-index__header {
+    display: grid;
+    margin-bottom: clamp(4rem, 8vw, 8rem);
+    padding-bottom: 2rem;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .research-index__header > p:last-child {
+    max-width: 34rem;
+    margin: 0;
+    justify-self: end;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    word-break: keep-all;
+  }
+
+  .research-index__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 5rem);
+  }
+
+  .research-index__grid > :global(:nth-child(even)) {
+    margin-top: clamp(3rem, 8vw, 9rem);
+  }
+
+  @media (max-width: 48rem) {
+    .research-index__header,
+    .research-index__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .research-index__header {
+      gap: 2rem;
+    }
+
+    .research-index__header > p:last-child {
+      justify-self: start;
+    }
+
+    .research-index__grid {
+      gap: 4rem;
+    }
+
+    .research-index__grid > :global(:nth-child(even)) {
+      margin-top: 0;
+    }
+  }
+</style>

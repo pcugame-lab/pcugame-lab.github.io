@@ -1,0 +1,66 @@
+---
+import CoreMark from "../components/CoreMark.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="페이지를 찾을 수 없습니다">
+  <section class="not-found" id="top">
+    <CoreMark class="not-found__mark" />
+    <div class="container">
+      <span>404 / Lost in Play</span>
+      <h1>핵심을<br />놓쳤습니다.</h1>
+      <p>찾으시는 페이지가 이동했거나 아직 만들어지지 않았습니다.</p>
+      <a class="text-link" href="/">
+        홈으로 돌아가기
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M2 10h15M11 4l6 6-6 6" fill="none" stroke="currentColor"></path>
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    display: grid;
+    min-height: calc(100svh - var(--header-height));
+    padding-block: 5rem;
+    color: var(--white);
+    background: var(--ink);
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .not-found span {
+    color: #777;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 3rem 0;
+    font-size: clamp(5rem, 13vw, 14rem);
+    font-weight: 600;
+    line-height: 0.78;
+    letter-spacing: -0.085em;
+  }
+
+  .not-found p {
+    max-width: 30rem;
+    margin: 0 0 3rem;
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  :global(.not-found__mark) {
+    position: absolute;
+    right: -8vw;
+    bottom: -12vw;
+    width: 55vw;
+    height: 55vw;
+    color: #222;
+  }
+</style>

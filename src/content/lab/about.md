@@ -12,7 +12,7 @@ heroLines:
     suffix: ""
     annotation: "Laboratory"
 lead: "우리는 플레이의 순간을 관찰하고, 설계하고, 검증합니다. 사람을 몰입하게 하는 본질을 찾아 더 오래 기억되는 경험을 만듭니다."
-statement: "재미를 감각으로만 남겨두지 않고, 설명하고 설계할 수 있는 언어로 바꿉니다."
+statement: "가나다라마바사 아자차카타파하. 하나둘 셋넷 다섯여섯."
 principles:
   - title: "Observe"
     label: "관찰"

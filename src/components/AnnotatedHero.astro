@@ -96,7 +96,6 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     width: clamp(13rem, 26vw, 31rem);
     height: clamp(13rem, 26vw, 31rem);
     color: #292929;
-    animation: core-turn 32s linear infinite;
   }
 
   .hero__meta {
@@ -121,10 +120,11 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     margin: clamp(2rem, 4vh, 4rem) auto;
     align-self: center;
     flex-direction: column;
+    row-gap: 0.06em;
     font-size: clamp(5.1rem, 12.5vw, 14rem);
     font-weight: 700;
-    line-height: 0.72;
-    letter-spacing: -0.095em;
+    line-height: 0.92;
+    letter-spacing: 0;
   }
 
   .hero__line {
@@ -171,10 +171,10 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
   }
 
   .hero__suffix {
-    margin-left: 0.14em;
+    margin-left: -0.08em;
     font-size: 0.27em;
     font-weight: 500;
-    letter-spacing: -0.05em;
+    letter-spacing: 0;
   }
 
   .hero__bottom {
@@ -218,12 +218,6 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     stroke-width: 1.5;
   }
 
-  @keyframes core-turn {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
   @media (max-width: 60rem) {
     .hero__title {
       font-size: clamp(4.8rem, 15.5vw, 9rem);
@@ -246,7 +240,7 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
 
     :global(.hero__core) {
       top: 18%;
-      right: -15%;
+      right: -4%;
       width: 65vw;
       height: 65vw;
     }
@@ -254,7 +248,8 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     .hero__title {
       margin-block: 4rem;
       font-size: clamp(4.35rem, 21vw, 8rem);
-      line-height: 0.78;
+      row-gap: 0.09em;
+      line-height: 0.94;
     }
 
     .hero__line--2 {

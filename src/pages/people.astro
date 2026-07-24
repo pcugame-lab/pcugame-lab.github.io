@@ -7,10 +7,36 @@ import { getMembers } from "../lib/content";
 
 const members = await getMembers();
 const renderedMembers = await Promise.all(
-  members.map(async (member) => ({
+  members.map(async (member, memberIndex) => ({
     member,
+    memberIndex,
     Content: (await render(member)).Content,
   })),
+);
+const positionHistory = renderedMembers.flatMap(
+  ({ member, memberIndex, Content }) =>
+    member.data.positions.map((position) => ({
+      member,
+      memberIndex,
+      Content,
+      position,
+    })),
+);
+const leadershipPositions = positionHistory.filter(
+  ({ position }) => position.level === "leadership",
+);
+const memberPositions = positionHistory.filter(
+  ({ position }) => position.level === "member",
+);
+const availableYears = [
+  ...new Set(positionHistory.map(({ position }) => position.year)),
+].sort((a, b) => b - a);
+const initialYear = availableYears[0] ?? new Date().getFullYear();
+const memberCountByYear = new Map(
+  availableYears.map((year) => [
+    year,
+    positionHistory.filter(({ position }) => position.year === year).length,
+  ]),
 );
 ---
 
@@ -22,7 +48,7 @@ const renderedMembers = await Promise.all(
     index="03"
     eyebrow="People"
     title="구성원"
-    titleEn="Different Minds, One Core"
+    titleEn="가나다라마바사 아자차카타파하"
     description="서로 다른 관심과 기술을 가진 사람들이 같은 질문을 각자의 방식으로 탐구합니다."
   />
 
@@ -30,28 +56,121 @@ const renderedMembers = await Promise.all(
     <div class="container">
       <p class="eyebrow">Lab Members</p>
       <p>
-        좋은 플레이는 한 사람의 정답보다<br />
-        서로 다른 시선이 만나는 곳에서 시작됩니다.
+        가나다라 마바사 아자차카타파하.<br />
+        하나둘 셋넷 다섯여섯 일곱여덟.
       </p>
     </div>
   </section>
 
   <section class="members">
     <div class="container">
-      {
-        renderedMembers.map(({ member, Content }, index) => (
-          <MemberCard member={member} index={index}>
-            <Content />
-          </MemberCard>
-        ))
-      }
+      <div class="members__head">
+        <div>
+          <p class="eyebrow">Organization</p>
+          <h2>연도별 조직도</h2>
+        </div>
+        <div class="year-switcher" role="group" aria-label="조직도 연도 선택">
+          {
+            availableYears.map((year, index) => (
+              <button
+                type="button"
+                data-org-year={year}
+                aria-pressed={index === 0 ? "true" : "false"}
+              >
+                <span>{year}</span>
+                <small>{memberCountByYear.get(year)}명</small>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div
+        class="org-chart"
+        data-org-chart
+        data-has-director={leadershipPositions.some(
+          ({ position }) => position.year === initialYear,
+        )}
+        data-has-members={memberPositions.some(
+          ({ position }) => position.year === initialYear,
+        )}
+      >
+        <div class="org-chart__status" aria-live="polite">
+          <span><strong data-org-active-year>{initialYear}</strong>년 구성</span>
+          <span><strong data-org-count>{memberCountByYear.get(initialYear)}</strong>명</span>
+        </div>
+
+        <p class="org-chart__level org-chart__level--leadership">
+          01 / Leadership
+        </p>
+        <div class="org-chart__leadership">
+          {
+            leadershipPositions.map(
+              ({ member, memberIndex, Content, position }) => (
+                <div
+                  class="org-chart__lead-node"
+                  data-org-member
+                  data-org-type="director"
+                  data-org-year={position.year}
+                  hidden={position.year !== initialYear}
+                >
+                  <MemberCard
+                    member={member}
+                    role={position.role}
+                    group={position.group}
+                    index={memberIndex}
+                  >
+                    <Content />
+                  </MemberCard>
+                </div>
+              ),
+            )
+          }
+        </div>
+
+        <div class="org-chart__branch" aria-hidden="true">
+          <span>Research Team</span>
+        </div>
+
+        <p class="org-chart__level org-chart__level--members">
+          02 / Members
+        </p>
+        <div class="org-chart__members">
+          {
+            memberPositions.map(
+              ({ member, memberIndex, Content, position }) => (
+                <div
+                  class="org-chart__member-node"
+                  data-org-member
+                  data-org-type="member"
+                  data-org-year={position.year}
+                  hidden={position.year !== initialYear}
+                >
+                  <MemberCard
+                    member={member}
+                    role={position.role}
+                    group={position.group}
+                    index={memberIndex}
+                  >
+                    <Content />
+                  </MemberCard>
+                </div>
+              ),
+            )
+          }
+        </div>
+
+        <p class="org-chart__empty" data-org-empty hidden>
+          선택한 연도에 등록된 구성원이 없습니다.
+        </p>
+      </div>
     </div>
   </section>
 
   <section class="join section section--dark">
     <div class="container">
       <span>Open Questions, Open Minds.</span>
-      <h2>함께 질문하고,<br />함께 플레이합니다.</h2>
+      <h2>가나다라 마바사,<br />아자차카타파하.</h2>
       <a class="text-link" href="https://github.com/pcugame-lab" target="_blank" rel="noreferrer">
         GitHub에서 만나기
         <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -84,12 +203,200 @@ const renderedMembers = await Promise.all(
   }
 
   .members {
+    --org-gap: clamp(0.75rem, 1.25vw, 1.5rem);
+    padding-top: clamp(2rem, 5vw, 5rem);
     padding-bottom: clamp(5rem, 10vw, 10rem);
     background: var(--paper);
   }
 
-  .members :global(.member-card + .member-card) {
+  .members__head {
+    display: flex;
+    padding-top: 1.5rem;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .members__head h2 {
+    margin: 1.5rem 0 0;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.065em;
+  }
+
+  .year-switcher {
+    display: flex;
+    max-width: 60%;
+    align-items: stretch;
+    border: 1px solid var(--line);
+    background: var(--white);
+    overflow-x: auto;
+  }
+
+  .year-switcher button {
+    display: flex;
+    min-width: 7rem;
+    padding: 0.85rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 0;
+    border-right: 1px solid var(--line);
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .year-switcher button:last-child {
+    border-right: 0;
+  }
+
+  .year-switcher button[aria-pressed="true"] {
+    color: var(--white);
+    background: var(--ink);
+  }
+
+  .year-switcher button span {
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .year-switcher button small {
+    color: #888;
+    font-size: 0.55rem;
+    font-weight: 700;
+  }
+
+  .org-chart {
     margin-top: clamp(4rem, 8vw, 8rem);
+  }
+
+  .org-chart__status {
+    display: flex;
+    margin-bottom: clamp(3rem, 5vw, 5rem);
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .org-chart__status span:last-child {
+    display: inline-flex;
+    width: 2.5rem;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--white);
+    background: var(--ink);
+  }
+
+  .org-chart__level {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .org-chart__level--members {
+    margin-top: -0.5rem;
+  }
+
+  .org-chart__leadership {
+    display: flex;
+    justify-content: center;
+    gap: var(--org-gap);
+  }
+
+  .org-chart__lead-node {
+    width: calc(25% - 1rem);
+    min-width: 15rem;
+  }
+
+  .org-chart__branch {
+    position: relative;
+    height: clamp(4.5rem, 7vw, 7rem);
+  }
+
+  .org-chart__branch::before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 50%;
+    background: var(--line);
+    content: "";
+  }
+
+  .org-chart__branch::after {
+    position: absolute;
+    top: 50%;
+    right: 12.5%;
+    left: 12.5%;
+    height: 1px;
+    background: var(--line);
+    content: "";
+  }
+
+  .org-chart__branch span {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    padding: 0.4rem 0.8rem;
+    color: var(--muted);
+    background: var(--paper);
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+  }
+
+  .org-chart__members {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: var(--org-gap);
+  }
+
+  .org-chart__member-node {
+    position: relative;
+  }
+
+  .org-chart__member-node::before {
+    position: absolute;
+    top: clamp(-3.5rem, -3.5vw, -2.25rem);
+    left: 50%;
+    width: 1px;
+    height: clamp(2.25rem, 3.5vw, 3.5rem);
+    background: var(--line);
+    content: "";
+  }
+
+  .org-chart__empty {
+    margin: 4rem 0 0;
+    padding: 4rem 1rem;
+    border: 1px dashed var(--line);
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .org-chart[data-has-director="false"] .org-chart__level--leadership,
+  .org-chart[data-has-director="false"] .org-chart__leadership,
+  .org-chart[data-has-director="false"] .org-chart__branch,
+  .org-chart[data-has-members="false"] .org-chart__branch,
+  .org-chart[data-has-members="false"] .org-chart__level--members,
+  .org-chart[data-has-members="false"] .org-chart__members {
+    display: none;
   }
 
   .join .container {
@@ -120,5 +427,131 @@ const renderedMembers = await Promise.all(
     .people-intro .container {
       grid-template-columns: 1fr;
     }
+
+    .members__head {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .year-switcher {
+      width: 100%;
+      max-width: none;
+      overflow-x: auto;
+    }
+
+    .year-switcher button {
+      min-width: 6.5rem;
+      flex: 1 0 auto;
+    }
+
+    .org-chart__leadership {
+      display: flex;
+    }
+
+    .org-chart__lead-node {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .org-chart__branch::after {
+      right: 50%;
+      left: 50%;
+    }
+
+    .org-chart__branch span {
+      white-space: nowrap;
+    }
+
+    .org-chart__members {
+      grid-template-columns: 1fr;
+    }
+
+    .org-chart__member-node + .org-chart__member-node {
+      margin-top: 1rem;
+    }
+
+    .org-chart__member-node::before {
+      display: none;
+    }
+  }
+
+  @media (min-width: 48.0625rem) and (max-width: 70rem) {
+    .org-chart__lead-node {
+      width: calc(50% - 0.75rem);
+    }
+
+    .org-chart__members {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>
+
+<script>
+  const chart = document.querySelector<HTMLElement>("[data-org-chart]");
+  const yearButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-org-year]"),
+  );
+
+  if (chart && yearButtons.length > 0) {
+    const memberNodes = Array.from(
+      chart.querySelectorAll<HTMLElement>("[data-org-member]"),
+    );
+    const activeYear = chart.querySelector<HTMLElement>(
+      "[data-org-active-year]",
+    );
+    const activeCount = chart.querySelector<HTMLElement>("[data-org-count]");
+    const emptyState = chart.querySelector<HTMLElement>("[data-org-empty]");
+
+    const showYear = (year: string, updateUrl = false) => {
+      let count = 0;
+      let directorCount = 0;
+      let memberCount = 0;
+
+      memberNodes.forEach((node) => {
+        const isVisible = node.dataset.orgYear === year;
+        node.hidden = !isVisible;
+
+        if (isVisible) {
+          count += 1;
+          if (node.dataset.orgType === "director") directorCount += 1;
+          if (node.dataset.orgType === "member") memberCount += 1;
+        }
+      });
+
+      yearButtons.forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.orgYear === year),
+        );
+      });
+
+      chart.dataset.hasDirector = String(directorCount > 0);
+      chart.dataset.hasMembers = String(memberCount > 0);
+      if (activeYear) activeYear.textContent = year;
+      if (activeCount) activeCount.textContent = String(count);
+      if (emptyState) emptyState.hidden = count > 0;
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("year", year);
+        window.history.replaceState({}, "", url);
+      }
+    };
+
+    yearButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (button.dataset.orgYear) showYear(button.dataset.orgYear, true);
+      });
+    });
+
+    const requestedYear = new URLSearchParams(window.location.search).get(
+      "year",
+    );
+    const initialButton = yearButtons.find(
+      (button) => button.dataset.orgYear === requestedYear,
+    );
+    showYear(
+      initialButton?.dataset.orgYear ?? yearButtons[0].dataset.orgYear ?? "",
+    );
+  }
+</script>

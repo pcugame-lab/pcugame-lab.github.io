@@ -13,6 +13,12 @@ import {
 const lab = await getLabProfile();
 const projects = await getFeaturedProjects();
 const members = await getMembers();
+const currentMembers = members.map((member) => ({
+  member,
+  position: member.data.positions.reduce((latest, position) =>
+    position.year > latest.year ? position : latest,
+  ),
+}));
 ---
 
 <BaseLayout>
@@ -63,7 +69,7 @@ const members = await getMembers();
       <SectionHeading
         index="02"
         eyebrow="Selected Research"
-        title="질문을 플레이 가능한 형태로."
+        title="가나다라마바사 아자차카타파하."
         description="관찰에서 시작한 질문을 프로토타입과 플레이테스트로 연결합니다. 각 프로젝트의 내용은 Markdown 파일에서 관리됩니다."
       />
       <div class="research__grid">
@@ -89,7 +95,7 @@ const members = await getMembers();
       <SectionHeading
         index="03"
         eyebrow="How We Work"
-        title="보고, 만들고, 다시 묻습니다."
+        title="가나다라마바사 아자차카타파하."
         light
       />
       <ol class="method__list">
@@ -117,11 +123,11 @@ const members = await getMembers();
       <SectionHeading
         index="04"
         eyebrow="People"
-        title="서로 다른 시선으로 같은 핵심을 봅니다."
+        title="가나다라마바사 아자차카타파하."
       />
       <div class="people__list">
         {
-          members.map((member, index) => (
+          currentMembers.map(({ member, position }, index) => (
             <a href="/people/" class="person-row">
               <span class="person-row__index">
                 {String(index + 1).padStart(2, "0")}
@@ -144,7 +150,7 @@ const members = await getMembers();
                 <strong>{member.data.name}</strong>
                 <small>{member.data.nameEn}</small>
               </span>
-              <span class="person-row__role">{member.data.role}</span>
+              <span class="person-row__role">{position.role}</span>
               <span class="person-row__arrow" aria-hidden="true">
                 ↗
               </span>
@@ -239,7 +245,6 @@ const members = await getMembers();
     height: clamp(5rem, 10vw, 11rem);
     justify-self: end;
     color: #555;
-    animation: intro-turn 24s linear infinite;
   }
 
   .intro__copy {
@@ -464,12 +469,6 @@ const members = await getMembers();
     color: var(--white);
     background: var(--ink);
     transform: rotate(45deg);
-  }
-
-  @keyframes intro-turn {
-    to {
-      transform: rotate(360deg);
-    }
   }
 
   @media (max-width: 64rem) {

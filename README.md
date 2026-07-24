@@ -37,13 +37,20 @@ npm run validate  # 검사 후 프로덕션 빌드
 ---
 name: "이름"
 nameEn: "English Name"
-role: "Researcher"
-group: "researcher"
 photo: "/images/members/name.jpg"
 interests:
   - "Game Design"
   - "Player Experience"
 order: 2
+positions:
+  - year: 2026
+    role: "Researcher"
+    group: "researcher"
+    level: "member"
+  - year: 2025
+    role: "Student Researcher"
+    group: "student"
+    level: "member"
 github: "https://github.com/username"
 website: "https://example.com"
 email: "name@example.com"
@@ -55,6 +62,9 @@ email: "name@example.com"
 `photo`, `github`, `website`, `email`은 선택 항목입니다. `photo`를 생략하면 구성원
 사진 대신 연구실 아이콘이 표시됩니다. 사진 파일은 `public/images/members/`에 넣고
 `/images/members/파일명.jpg`처럼 지정합니다. 값이 있는 링크만 구성원 카드에 표시됩니다.
+`positions`에는 연도별 역할을 기록합니다. `level`은 연구실장처럼 조직도 상단에
+배치할 때 `leadership`, 일반 구성원일 때 `member`를 사용합니다. 같은 구성원에게
+동일한 연도를 두 번 지정하면 콘텐츠 검사에서 오류로 처리됩니다.
 
 ### 프로젝트 추가
 

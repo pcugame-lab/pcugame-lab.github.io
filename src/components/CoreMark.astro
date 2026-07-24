@@ -25,13 +25,16 @@ const { label = false, class: className } = Astro.props;
     </g>
 
     <g class="core-mark__orbit core-mark__orbit--outer">
-      <path d="M158 382 L207 316"></path>
-      <path d="M814 317 Q865 366 889 440"></path>
-      <path d="M873 370 Q948 363 931 410 Q920 441 894 465"></path>
-      <path d="M862 502 Q813 555 752 587"></path>
-      <path d="M786 725 Q744 807 648 850"></path>
-      <path d="M612 874 Q560 892 510 893"></path>
-      <path d="M236 689 Q273 761 347 802"></path>
+      <path pathLength="1" d="M158 382 L207 316"></path>
+      <path pathLength="1" d="M814 317 Q865 366 889 440"></path>
+      <path
+        pathLength="1"
+        d="M873 370 Q948 363 931 410 Q920 441 894 465"
+      ></path>
+      <path pathLength="1" d="M862 502 Q813 555 752 587"></path>
+      <path pathLength="1" d="M786 725 Q744 807 648 850"></path>
+      <path pathLength="1" d="M612 874 Q560 892 510 893"></path>
+      <path pathLength="1" d="M236 689 Q273 761 347 802"></path>
     </g>
 
     <g class="core-mark__dots">
@@ -41,13 +44,22 @@ const { label = false, class: className } = Astro.props;
     </g>
 
     <g class="core-mark__orbit core-mark__orbit--inner">
-      <path class="core-mark__arc" d="M291 375 Q512 141 733 375"></path>
       <path
         class="core-mark__arc"
+        pathLength="1"
+        d="M291 375 Q512 141 733 375"
+      ></path>
+      <path
+        class="core-mark__arc"
+        pathLength="1"
         d="M279 689 Q371 838 514 841 Q658 843 748 703"
       ></path>
-      <path class="core-mark__arc" d="M278 690 Q310 741 362 773"></path>
-      <path d="M407 829 Q505 858 608 829"></path>
+      <path
+        class="core-mark__arc"
+        pathLength="1"
+        d="M278 690 Q310 741 362 773"
+      ></path>
+      <path pathLength="1" d="M407 829 Q505 858 608 829"></path>
     </g>
 
     <g class="core-mark__letters">
@@ -110,12 +122,14 @@ const { label = false, class: className } = Astro.props;
     stroke-width: 14;
   }
 
-  .core-mark__wordmark,
-  .core-mark__orbit,
-  .core-mark__dots {
-    transform-origin: 512px 512px;
-    transform-box: view-box;
-    will-change: transform;
+  .core-mark__orbit path {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 0;
+  }
+
+  .core-mark__dots circle {
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
   .core-mark > span {
@@ -129,58 +143,89 @@ const { label = false, class: className } = Astro.props;
    * animates automatically, so the rule applies consistently across pages.
    */
   @container core-mark (min-width: 5rem) {
-    .core-mark__wordmark {
-      animation: core-mark-turn 42s linear infinite;
+    .core-mark__orbit path {
+      animation: core-mark-segment-breathe 6.8s ease-in-out infinite;
+      will-change: stroke-dashoffset;
     }
 
-    .core-mark__orbit--outer {
-      animation: core-mark-turn-reverse 34s linear infinite;
+    .core-mark__orbit--outer path {
+      --segment-travel: 0.12;
     }
 
-    .core-mark__orbit--inner {
-      animation: core-mark-orbit-breathe 5.4s ease-in-out infinite;
+    .core-mark__orbit--outer path:nth-child(even) {
+      --segment-travel: -0.12;
     }
 
-    .core-mark__dots {
-      animation:
-        core-mark-turn-reverse 34s linear infinite,
-        dots-breathe 3.2s ease-in-out infinite;
+    .core-mark__orbit--outer path:nth-child(2) {
+      animation-delay: -1.7s;
+    }
+
+    .core-mark__orbit--outer path:nth-child(3) {
+      animation-delay: -3.4s;
+    }
+
+    .core-mark__orbit--outer path:nth-child(4) {
+      animation-delay: -5.1s;
+    }
+
+    .core-mark__orbit--outer path:nth-child(5) {
+      animation-delay: -2.55s;
+    }
+
+    .core-mark__orbit--outer path:nth-child(6) {
+      animation-delay: -4.25s;
+    }
+
+    .core-mark__orbit--outer path:nth-child(7) {
+      animation-delay: -0.85s;
+    }
+
+    .core-mark__orbit--inner path {
+      --segment-travel: 0.035;
+
+      animation-duration: 8.4s;
+    }
+
+    .core-mark__orbit--inner path:nth-child(even) {
+      --segment-travel: -0.035;
+    }
+
+    .core-mark__orbit--inner path:nth-child(2) {
+      animation-delay: -4.2s;
+    }
+
+    .core-mark__orbit--inner path:nth-child(3) {
+      animation-delay: -2.1s;
+    }
+
+    .core-mark__orbit--inner path:nth-child(4) {
+      animation-delay: -6.3s;
+    }
+
+    .core-mark__dots circle {
+      animation: core-mark-dot-breathe 3.2s ease-in-out infinite;
+      will-change: opacity, transform;
+    }
+
+    .core-mark__dots circle:nth-child(2) {
+      animation-delay: -1.05s;
+    }
+
+    .core-mark__dots circle:nth-child(3) {
+      animation-delay: -2.1s;
     }
   }
 
-  @keyframes core-mark-turn {
-    from {
-      transform: rotate(0turn);
-    }
-
-    to {
-      transform: rotate(1turn);
+  @keyframes core-mark-segment-breathe {
+    50% {
+      stroke-dashoffset: var(--segment-travel);
     }
   }
 
-  @keyframes core-mark-turn-reverse {
-    from {
-      transform: rotate(0turn);
-    }
-
-    to {
-      transform: rotate(-1turn);
-    }
-  }
-
-  @keyframes dots-breathe {
+  @keyframes core-mark-dot-breathe {
     50% {
       opacity: 0.45;
-    }
-  }
-
-  /*
-   * The thick arcs are composed around the fixed LCL letters. Rotating them
-   * moves their ends through the letters, so they only breathe outwards.
-   */
-  @keyframes core-mark-orbit-breathe {
-    50% {
-      transform: scale(1.025);
+      transform: scale(0.72);
     }
   }
 </style>

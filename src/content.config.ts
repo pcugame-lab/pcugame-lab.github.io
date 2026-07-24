@@ -55,12 +55,25 @@ const members = defineCollection({
   schema: z.object({
     name: z.string(),
     nameEn: z.string(),
-    role: z.string(),
-    group: z.enum(["faculty", "researcher", "student", "alumni"]),
     monogram: z.string().max(4).optional(),
     photo: z.string().optional(),
     interests: z.array(z.string()),
     order: z.number().int().nonnegative(),
+    positions: z
+      .array(
+        z.object({
+          year: z.number().int().min(2000),
+          role: z.string(),
+          group: z.enum(["faculty", "researcher", "student", "alumni"]),
+          level: z.enum(["leadership", "member"]).default("member"),
+        }),
+      )
+      .min(1)
+      .refine(
+        (positions) =>
+          new Set(positions.map(({ year }) => year)).size === positions.length,
+        "한 구성원에게 같은 연도의 역할을 두 번 지정할 수 없습니다.",
+      ),
     github: z.url().optional(),
     website: z.url().optional(),
     email: z.email().optional(),

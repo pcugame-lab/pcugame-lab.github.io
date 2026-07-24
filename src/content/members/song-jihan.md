@@ -1,14 +1,21 @@
 ---
 name: "송지한"
-nameEn: "Song Jihan"
-role: "Researcher"
-group: "researcher"
+nameEn: "Jihan Song"
 monogram: "SJH"
 interests:
   - "Code Agents"
   - "Web Development"
 order: 1
+positions:
+  - year: 2026
+    role: "Developer"
+    group: "researcher"
+    level: "member"
+  - year: 2025
+    role: "Developer"
+    group: "researcher"
+    level: "member"
 github: "https://github.com/bipolarrr"
 ---
 
-게임의 게임이 아닌 부분을 탐구합니다.
+모든 프로그램을 쉽게 만들 방법을 탐구합니다.

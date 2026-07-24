@@ -1,9 +1,9 @@
 export const site = {
   name: "Ludic Core Laboratory",
   shortName: "LCL",
-  title: "LCL — Ludic Core Laboratory",
+  title: "Ludic Core Laboratory",
   description:
-    "재미의 핵심을 연구하는 Ludic Core Laboratory의 연구와 사람들을 소개합니다.",
+    "배재대학교 게임공학과 연구실 LCL",
   url: "https://pcugame-lab.github.io",
   github: "https://github.com/pcugame-lab",
   nav: [

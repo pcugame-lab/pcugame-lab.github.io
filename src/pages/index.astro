@@ -126,8 +126,19 @@ const members = await getMembers();
               <span class="person-row__index">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span class="person-row__avatar" aria-hidden="true">
-                {member.data.monogram}
+              <span
+                class:list={[
+                  "person-row__avatar",
+                  { "person-row__avatar--placeholder": !member.data.photo },
+                ]}
+                aria-hidden="true"
+              >
+                <img
+                  src={member.data.photo ?? "/lcl-logo.svg"}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
               </span>
               <span class="person-row__name">
                 <strong>{member.data.name}</strong>
@@ -383,7 +394,22 @@ const members = await getMembers();
     font-size: 0.8rem;
     font-weight: 700;
     place-items: center;
+    overflow: hidden;
     transition: border-radius 500ms var(--ease-out);
+  }
+
+  .person-row__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .person-row__avatar--placeholder img {
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: invert(1);
   }
 
   .person-row__name {

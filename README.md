@@ -39,7 +39,7 @@ name: "이름"
 nameEn: "English Name"
 role: "Researcher"
 group: "researcher"
-monogram: "ABC"
+photo: "/images/members/name.jpg"
 interests:
   - "Game Design"
   - "Player Experience"
@@ -52,7 +52,9 @@ email: "name@example.com"
 소개 문장을 Markdown으로 작성합니다.
 ```
 
-`github`, `website`, `email`은 선택 항목입니다. 값이 있는 링크만 구성원 카드에 표시됩니다.
+`photo`, `github`, `website`, `email`은 선택 항목입니다. `photo`를 생략하면 구성원
+사진 대신 연구실 아이콘이 표시됩니다. 사진 파일은 `public/images/members/`에 넣고
+`/images/members/파일명.jpg`처럼 지정합니다. 값이 있는 링크만 구성원 카드에 표시됩니다.
 
 ### 프로젝트 추가
 

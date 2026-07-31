@@ -5,7 +5,6 @@ monogram: "SJH"
 interests:
   - "Code Agents"
   - "Web Development"
-order: 1
 positions:
   - year: 2026
     role: "Developer"

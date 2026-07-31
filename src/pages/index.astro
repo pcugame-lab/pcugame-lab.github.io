@@ -9,16 +9,20 @@ import {
   getLabProfile,
   getMembers,
 } from "../lib/content";
+import {
+  getLatestMemberPosition,
+  sortPositionedMembers,
+} from "../lib/member-sort";
 
 const lab = await getLabProfile();
 const projects = await getFeaturedProjects();
 const members = await getMembers();
-const currentMembers = members.map((member) => ({
-  member,
-  position: member.data.positions.reduce((latest, position) =>
-    position.year > latest.year ? position : latest,
-  ),
-}));
+const currentMembers = sortPositionedMembers(
+  members.map((member) => ({
+    member,
+    position: getLatestMemberPosition(member),
+  })),
+);
 ---
 
 <BaseLayout>

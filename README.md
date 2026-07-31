@@ -41,7 +41,6 @@ photo: "/images/members/name.jpg"
 interests:
   - "Game Design"
   - "Player Experience"
-order: 2
 positions:
   - year: 2026
     role: "Researcher"
@@ -64,7 +63,10 @@ email: "name@example.com"
 `/images/members/파일명.jpg`처럼 지정합니다. 값이 있는 링크만 구성원 카드에 표시됩니다.
 `positions`에는 연도별 역할을 기록합니다. `level`은 연구실장처럼 조직도 상단에
 배치할 때 `leadership`, 일반 구성원일 때 `member`를 사용합니다. 같은 구성원에게
-동일한 연도를 두 번 지정하면 콘텐츠 검사에서 오류로 처리됩니다.
+동일한 연도를 두 번 지정하면 콘텐츠 검사에서 오류로 처리됩니다. 구성원 표시 순서는
+별도의 `order` 값 없이 연구실장·부연구실장 등 특수 직책을 먼저 배치하고, 그 안에서는
+이름의 가나다순으로 정합니다. 다국어 직책 별칭과 이름 정렬 기준은
+`src/lib/member-sort.ts`의 정렬 정책에서 한곳에 관리합니다.
 
 ### 프로젝트 추가
 

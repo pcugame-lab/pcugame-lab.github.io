@@ -3,7 +3,6 @@ name: "박재규"
 nameEn: "Jaegyu Park"
 monogram: "PJK"
 interests: []
-order: 0
 positions:
   - year: 2026
     role: "Lab Director"

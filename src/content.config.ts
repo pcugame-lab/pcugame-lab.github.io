@@ -58,7 +58,6 @@ const members = defineCollection({
     monogram: z.string().max(4).optional(),
     photo: z.string().optional(),
     interests: z.array(z.string()),
-    order: z.number().int().nonnegative(),
     positions: z
       .array(
         z.object({

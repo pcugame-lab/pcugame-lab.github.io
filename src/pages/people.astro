@@ -4,6 +4,7 @@ import MemberCard from "../components/MemberCard.astro";
 import PageHero from "../components/PageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getMembers } from "../lib/content";
+import { sortPositionedMembers } from "../lib/member-sort";
 
 const members = await getMembers();
 const renderedMembers = await Promise.all(
@@ -22,11 +23,13 @@ const positionHistory = renderedMembers.flatMap(
       position,
     })),
 );
-const leadershipPositions = positionHistory.filter(
-  ({ position }) => position.level === "leadership",
+const leadershipPositions = sortPositionedMembers(
+  positionHistory.filter(
+    ({ position }) => position.level === "leadership",
+  ),
 );
-const memberPositions = positionHistory.filter(
-  ({ position }) => position.level === "member",
+const memberPositions = sortPositionedMembers(
+  positionHistory.filter(({ position }) => position.level === "member"),
 );
 const availableYears = [
   ...new Set(positionHistory.map(({ position }) => position.year)),

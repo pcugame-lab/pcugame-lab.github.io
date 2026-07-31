@@ -1,6 +1,5 @@
 ---
 import { site } from "../config/site";
-import CoreMark from "./CoreMark.astro";
 
 const year = new Date().getFullYear();
 ---
@@ -36,7 +35,6 @@ const year = new Date().getFullYear();
 
   <div class="footer-wordmark container" aria-label={site.name}>
     <span>Ludic</span>
-    <CoreMark class="footer-wordmark__mark" />
     <span>Core</span>
     <span>Laboratory</span>
   </div>
@@ -119,32 +117,25 @@ const year = new Date().getFullYear();
   }
 
   .footer-wordmark {
-    display: grid;
+    display: flex;
     padding-block: 1.2rem 2.5rem;
-    align-items: center;
-    grid-template-columns: auto auto auto;
+    flex-direction: column;
+    align-items: flex-start;
     border-top: 1px solid var(--line-dark);
     font-size: clamp(4rem, 11.2vw, 13rem);
     font-weight: 700;
-    line-height: 0.72;
+    line-height: 0.78;
     letter-spacing: -0.085em;
   }
 
-  .footer-wordmark > span:nth-of-type(2) {
-    justify-self: end;
+  .footer-wordmark > span {
+    display: block;
   }
 
   .footer-wordmark > span:last-child {
-    grid-column: 1 / -1;
     margin-top: 0.25em;
     color: transparent;
     -webkit-text-stroke: 1px #555;
-  }
-
-  :global(.footer-wordmark__mark) {
-    width: clamp(3rem, 6vw, 7rem);
-    height: clamp(3rem, 6vw, 7rem);
-    margin-inline: 0.25em;
   }
 
   .site-footer__bottom {
@@ -177,11 +168,6 @@ const year = new Date().getFullYear();
     .site-footer__top {
       grid-template-columns: 1fr;
       gap: 4rem;
-    }
-
-    .footer-wordmark {
-      grid-template-columns: auto auto auto;
-      font-size: 19vw;
     }
 
     .site-footer__bottom {

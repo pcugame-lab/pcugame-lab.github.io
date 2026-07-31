@@ -24,42 +24,34 @@ const { label = false, class: className } = Astro.props;
       <text x="774" y="302" transform="rotate(40 774 302)">B</text>
     </g>
 
-    <g class="core-mark__orbit core-mark__orbit--outer">
-      <path pathLength="1" d="M158 382 L207 316"></path>
-      <path pathLength="1" d="M814 317 Q865 366 889 440"></path>
-      <path
-        pathLength="1"
-        d="M873 370 Q948 363 931 410 Q920 441 894 465"
-      ></path>
-      <path pathLength="1" d="M862 502 Q813 555 752 587"></path>
-      <path pathLength="1" d="M786 725 Q744 807 648 850"></path>
-      <path pathLength="1" d="M612 874 Q560 892 510 893"></path>
-      <path pathLength="1" d="M236 689 Q273 761 347 802"></path>
+    <g class="core-mark__rotor core-mark__rotor--outer">
+      <g class="core-mark__orbit core-mark__orbit--outer">
+        <path d="M158 382 L207 316"></path>
+        <path d="M814 317 Q865 366 889 440"></path>
+        <path d="M873 370 Q948 363 931 410 Q920 441 894 465"></path>
+        <path d="M862 502 Q813 555 752 587"></path>
+        <path d="M786 725 Q744 807 648 850"></path>
+        <path d="M612 874 Q560 892 510 893"></path>
+        <path d="M236 689 Q273 761 347 802"></path>
+      </g>
+
+      <g class="core-mark__dots">
+        <circle cx="879" cy="482" r="14"></circle>
+        <circle cx="629" cy="864" r="10"></circle>
+        <circle cx="386" cy="823" r="10"></circle>
+      </g>
     </g>
 
-    <g class="core-mark__dots">
-      <circle cx="879" cy="482" r="14"></circle>
-      <circle cx="629" cy="864" r="10"></circle>
-      <circle cx="386" cy="823" r="10"></circle>
-    </g>
-
-    <g class="core-mark__orbit core-mark__orbit--inner">
-      <path
-        class="core-mark__arc"
-        pathLength="1"
-        d="M291 375 Q512 141 733 375"
-      ></path>
-      <path
-        class="core-mark__arc"
-        pathLength="1"
-        d="M279 689 Q371 838 514 841 Q658 843 748 703"
-      ></path>
-      <path
-        class="core-mark__arc"
-        pathLength="1"
-        d="M278 690 Q310 741 362 773"
-      ></path>
-      <path pathLength="1" d="M407 829 Q505 858 608 829"></path>
+    <g class="core-mark__rotor core-mark__rotor--inner">
+      <g class="core-mark__orbit core-mark__orbit--inner">
+        <path class="core-mark__arc" d="M291 375 Q512 141 733 375"></path>
+        <path
+          class="core-mark__arc"
+          d="M279 689 Q371 838 514 841 Q658 843 748 703"
+        ></path>
+        <path class="core-mark__arc" d="M278 690 Q310 741 362 773"></path>
+        <path d="M407 829 Q505 858 608 829"></path>
+      </g>
     </g>
 
     <g class="core-mark__letters">
@@ -122,14 +114,13 @@ const { label = false, class: className } = Astro.props;
     stroke-width: 14;
   }
 
-  .core-mark__orbit path {
-    stroke-dasharray: 1 1;
-    stroke-dashoffset: 0;
+  .core-mark__rotor {
+    transform-box: view-box;
+    transform-origin: 512px 512px;
   }
 
-  .core-mark__dots circle {
-    transform-box: fill-box;
-    transform-origin: center;
+  .core-mark__rotor--inner {
+    transform-origin: 509px 534px;
   }
 
   .core-mark > span {
@@ -143,89 +134,26 @@ const { label = false, class: className } = Astro.props;
    * animates automatically, so the rule applies consistently across pages.
    */
   @container core-mark (min-width: 5rem) {
-    .core-mark__orbit path {
-      animation: core-mark-segment-breathe 6.8s ease-in-out infinite;
-      will-change: stroke-dashoffset;
+    .core-mark__rotor--outer {
+      animation: core-mark-rotate-clockwise 24s linear infinite;
+      will-change: transform;
     }
 
-    .core-mark__orbit--outer path {
-      --segment-travel: 0.12;
-    }
-
-    .core-mark__orbit--outer path:nth-child(even) {
-      --segment-travel: -0.12;
-    }
-
-    .core-mark__orbit--outer path:nth-child(2) {
-      animation-delay: -1.7s;
-    }
-
-    .core-mark__orbit--outer path:nth-child(3) {
-      animation-delay: -3.4s;
-    }
-
-    .core-mark__orbit--outer path:nth-child(4) {
-      animation-delay: -5.1s;
-    }
-
-    .core-mark__orbit--outer path:nth-child(5) {
-      animation-delay: -2.55s;
-    }
-
-    .core-mark__orbit--outer path:nth-child(6) {
-      animation-delay: -4.25s;
-    }
-
-    .core-mark__orbit--outer path:nth-child(7) {
-      animation-delay: -0.85s;
-    }
-
-    .core-mark__orbit--inner path {
-      --segment-travel: 0.035;
-
-      animation-duration: 8.4s;
-    }
-
-    .core-mark__orbit--inner path:nth-child(even) {
-      --segment-travel: -0.035;
-    }
-
-    .core-mark__orbit--inner path:nth-child(2) {
-      animation-delay: -4.2s;
-    }
-
-    .core-mark__orbit--inner path:nth-child(3) {
-      animation-delay: -2.1s;
-    }
-
-    .core-mark__orbit--inner path:nth-child(4) {
-      animation-delay: -6.3s;
-    }
-
-    .core-mark__dots circle {
-      animation: core-mark-dot-breathe 3.2s ease-in-out infinite;
-      will-change: opacity, transform;
-    }
-
-    .core-mark__dots circle:nth-child(2) {
-      animation-delay: -1.05s;
-    }
-
-    .core-mark__dots circle:nth-child(3) {
-      animation-delay: -2.1s;
+    .core-mark__rotor--inner {
+      animation: core-mark-rotate-counterclockwise 18s linear infinite;
+      will-change: transform;
     }
   }
 
-  @keyframes core-mark-segment-breathe {
-    50% {
-      stroke-dashoffset: var(--segment-travel);
+  @keyframes core-mark-rotate-clockwise {
+    to {
+      transform: rotate(1turn);
     }
   }
 
-  @keyframes core-mark-dot-breathe {
-    50% {
-      opacity: 0.45;
-      transform: scale(0.72);
+  @keyframes core-mark-rotate-counterclockwise {
+    to {
+      transform: rotate(-1turn);
     }
   }
 </style>

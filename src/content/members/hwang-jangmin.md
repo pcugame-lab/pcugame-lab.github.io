@@ -3,7 +3,6 @@ name: "황장민"
 nameEn: "Hwang Jangmin"
 monogram: "PJK"
 interests: []
-order: 0
 positions:
   - year: 2026
     role: "Researcher"

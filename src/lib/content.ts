@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import { sortMembers } from "./member-sort";
 
 type OrderedEntry = { data: { order: number } };
 
@@ -28,5 +29,5 @@ export async function getFeaturedProjects() {
 
 export async function getMembers() {
   const entries = await getCollection("members");
-  return entries.sort(byOrder);
+  return sortMembers(entries);
 }

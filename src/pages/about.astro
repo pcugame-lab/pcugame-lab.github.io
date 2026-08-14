@@ -3,28 +3,34 @@ import { render } from "astro:content";
 import PageHero from "../components/PageHero.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getLabProfile } from "../lib/content";
+import { getPageContent, getSiteContent } from "../lib/content";
 
-const lab = await getLabProfile();
-const { Content } = await render(lab);
+const [siteContent, aboutContent] = await Promise.all([
+  getSiteContent(),
+  getPageContent("about"),
+]);
+const { Content } = await render(aboutContent);
 ---
 
-<BaseLayout title="연구실 소개" description={lab.data.lead}>
+<BaseLayout
+  title={aboutContent.data.seo.title}
+  description={aboutContent.data.seo.description}
+>
   <PageHero
-    index="01"
-    eyebrow={lab.data.eyebrow}
-    title="연구실"
-    titleEn="About the Lab"
-    description={lab.data.lead}
+    index={aboutContent.data.hero.index}
+    eyebrow={aboutContent.data.hero.eyebrow}
+    title={aboutContent.data.hero.title}
+    titleEn={aboutContent.data.hero.titleEn}
+    description={aboutContent.data.hero.description}
   />
 
   <section class="manifesto section">
     <div class="container">
-      <p class="manifesto__label">Our Point of View</p>
-      <p class="manifesto__statement">{lab.data.statement}</p>
+      <p class="manifesto__label">{aboutContent.data.manifestoLabel}</p>
+      <p class="manifesto__statement">{siteContent.data.lab.statement}</p>
       <dl class="manifesto__facts">
         {
-          lab.data.facts.map((fact) => (
+          siteContent.data.lab.facts.map((fact) => (
             <div>
               <dt>{fact.label}</dt>
               <dd>{fact.value}</dd>
@@ -38,8 +44,8 @@ const { Content } = await render(lab);
   <section class="about-copy section">
     <div class="about-copy__inner container">
       <aside>
-        <span>01 — 03</span>
-        <p class="eyebrow">LCL Manifesto</p>
+        <span>{aboutContent.data.bodyMeta.index}</span>
+        <p class="eyebrow">{aboutContent.data.bodyMeta.eyebrow}</p>
       </aside>
       <article class="prose">
         <Content />
@@ -50,14 +56,14 @@ const { Content } = await render(lab);
   <section class="principles section section--dark">
     <div class="container">
       <SectionHeading
-        index="02"
-        eyebrow="Our Process"
-        title="가나다라마바사 아자차카타파하."
+        index={aboutContent.data.principles.index}
+        eyebrow={aboutContent.data.principles.eyebrow}
+        title={aboutContent.data.principles.title}
         light
       />
       <div class="principles__grid">
         {
-          lab.data.principles.map((principle, index) => (
+          siteContent.data.lab.principles.map((principle, index) => (
             <article>
               <div>
                 <span>{String(index + 1).padStart(2, "0")}</span>

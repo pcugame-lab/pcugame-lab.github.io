@@ -13,5 +13,3 @@ positions:
     group: "faculty"
     level: "leadership"
 ---
-
-여기에 설명 입력

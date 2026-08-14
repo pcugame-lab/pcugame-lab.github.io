@@ -3,10 +3,14 @@ import { render } from "astro:content";
 import MemberCard from "../components/MemberCard.astro";
 import PageHero from "../components/PageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getMembers } from "../lib/content";
+import { getMembers, getPageContent, getSiteContent } from "../lib/content";
 import { sortPositionedMembers } from "../lib/member-sort";
 
-const members = await getMembers();
+const [members, { data: siteContent }, { data: content }] = await Promise.all([
+  getMembers(),
+  getSiteContent(),
+  getPageContent("people"),
+]);
 const renderedMembers = await Promise.all(
   members.map(async (member, memberIndex) => ({
     member,
@@ -44,23 +48,26 @@ const memberCountByYear = new Map(
 ---
 
 <BaseLayout
-  title="구성원"
-  description="Ludic Core Laboratory를 함께 만드는 연구자들을 소개합니다."
+  title={content.seo.title}
+  description={content.seo.description}
 >
   <PageHero
-    index="03"
-    eyebrow="People"
-    title="구성원"
-    titleEn="가나다라마바사 아자차카타파하"
-    description="서로 다른 관심과 기술을 가진 사람들이 같은 질문을 각자의 방식으로 탐구합니다."
+    index={content.hero.index}
+    eyebrow={content.hero.eyebrow}
+    title={content.hero.title}
+    titleEn={content.hero.titleEn}
+    description={content.hero.description}
   />
 
   <section class="people-intro section--compact">
     <div class="container">
-      <p class="eyebrow">Lab Members</p>
+      <p class="eyebrow">{content.introEyebrow}</p>
       <p>
-        가나다라 마바사 아자차카타파하.<br />
-        하나둘 셋넷 다섯여섯 일곱여덟.
+        {
+          content.introLines.map((line, index) => (
+            <>{index > 0 && <br />}{line}</>
+          ))
+        }
       </p>
     </div>
   </section>
@@ -69,10 +76,14 @@ const memberCountByYear = new Map(
     <div class="container">
       <div class="members__head">
         <div>
-          <p class="eyebrow">Organization</p>
-          <h2>연도별 조직도</h2>
+          <p class="eyebrow">{content.organizationEyebrow}</p>
+          <h2>{content.organizationTitle}</h2>
         </div>
-        <div class="year-switcher" role="group" aria-label="조직도 연도 선택">
+        <div
+          class="year-switcher"
+          role="group"
+          aria-label={content.yearSelectorAriaLabel}
+        >
           {
             availableYears.map((year, index) => (
               <button
@@ -81,7 +92,7 @@ const memberCountByYear = new Map(
                 aria-pressed={index === 0 ? "true" : "false"}
               >
                 <span>{year}</span>
-                <small>{memberCountByYear.get(year)}명</small>
+                <small>{memberCountByYear.get(year)}{content.yearCountSuffix}</small>
               </button>
             ))
           }
@@ -99,12 +110,12 @@ const memberCountByYear = new Map(
         )}
       >
         <div class="org-chart__status" aria-live="polite">
-          <span><strong data-org-active-year>{initialYear}</strong>년 구성</span>
-          <span><strong data-org-count>{memberCountByYear.get(initialYear)}</strong>명</span>
+          <span><strong data-org-active-year>{initialYear}</strong>{content.statusYearSuffix}</span>
+          <span><strong data-org-count>{memberCountByYear.get(initialYear)}</strong>{content.statusCountSuffix}</span>
         </div>
 
         <p class="org-chart__level org-chart__level--leadership">
-          01 / Leadership
+          {content.leadershipLabel}
         </p>
         <div class="org-chart__leadership">
           {
@@ -132,11 +143,11 @@ const memberCountByYear = new Map(
         </div>
 
         <div class="org-chart__branch" aria-hidden="true">
-          <span>Research Team</span>
+          <span>{content.teamLabel}</span>
         </div>
 
         <p class="org-chart__level org-chart__level--members">
-          02 / Members
+          {content.membersLabel}
         </p>
         <div class="org-chart__members">
           {
@@ -164,7 +175,7 @@ const memberCountByYear = new Map(
         </div>
 
         <p class="org-chart__empty" data-org-empty hidden>
-          선택한 연도에 등록된 구성원이 없습니다.
+          {content.emptyLabel}
         </p>
       </div>
     </div>
@@ -172,10 +183,16 @@ const memberCountByYear = new Map(
 
   <section class="join section section--dark">
     <div class="container">
-      <span>Open Questions, Open Minds.</span>
-      <h2>가나다라 마바사,<br />아자차카타파하.</h2>
-      <a class="text-link" href="https://github.com/pcugame-lab" target="_blank" rel="noreferrer">
-        GitHub에서 만나기
+      <span>{content.joinEyebrow}</span>
+      <h2>
+        {
+          content.joinTitleLines.map((line, index) => (
+            <>{index > 0 && <br />}{line}</>
+          ))
+        }
+      </h2>
+      <a class="text-link" href={siteContent.site.github} target="_blank" rel="noreferrer">
+        {content.joinLinkLabel}
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <path d="M2 10h15M11 4l6 6-6 6" fill="none" stroke="currentColor"></path>
         </svg>

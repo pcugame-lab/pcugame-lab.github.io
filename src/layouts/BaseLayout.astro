@@ -1,7 +1,7 @@
 ---
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
-import { site } from "../config/site";
+import { getSiteContent } from "../lib/content";
 import "../styles/global.css";
 
 interface Props {
@@ -9,6 +9,8 @@ interface Props {
   description?: string;
 }
 
+const { data: content } = await getSiteContent();
+const { site, accessibility } = content;
 const {
   title,
   description = site.description,
@@ -37,7 +39,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
     <title>{documentTitle}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">본문으로 이동</a>
+    <a class="skip-link" href="#main-content">{accessibility.skipLinkLabel}</a>
     <SiteHeader />
     <main id="main-content">
       <slot />

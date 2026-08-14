@@ -1,17 +1,26 @@
 ---
 import CoreMark from "../components/CoreMark.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPageContent } from "../lib/content";
+
+const { data: content } = await getPageContent("404");
 ---
 
-<BaseLayout title="페이지를 찾을 수 없습니다">
+<BaseLayout title={content.seoTitle}>
   <section class="not-found" id="top">
     <CoreMark class="not-found__mark" />
     <div class="container">
-      <span>404 / Lost in Play</span>
-      <h1>핵심을<br />놓쳤습니다.</h1>
-      <p>찾으시는 페이지가 이동했거나 아직 만들어지지 않았습니다.</p>
+      <span>{content.eyebrow}</span>
+      <h1>
+        {
+          content.titleLines.map((line, index) => (
+            <>{index > 0 && <br />}{line}</>
+          ))
+        }
+      </h1>
+      <p>{content.description}</p>
       <a class="text-link" href="/">
-        홈으로 돌아가기
+        {content.homeLinkLabel}
         <svg viewBox="0 0 20 20" aria-hidden="true">
           <path d="M2 10h15M11 4l6 6-6 6" fill="none" stroke="currentColor"></path>
         </svg>

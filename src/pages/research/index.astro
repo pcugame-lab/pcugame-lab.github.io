@@ -2,30 +2,36 @@
 import PageHero from "../../components/PageHero.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getProjects } from "../../lib/content";
+import { getPageContent, getProjects } from "../../lib/content";
 
-const projects = await getProjects();
+const [projects, { data: content }] = await Promise.all([
+  getProjects(),
+  getPageContent("research"),
+]);
 ---
 
 <BaseLayout
-  title="연구 및 프로젝트"
-  description="Ludic Core Laboratory의 연구 질문과 플레이 가능한 프로젝트를 소개합니다."
+  title={content.seo.title}
+  description={content.seo.description}
 >
   <PageHero
-    index="02"
-    eyebrow="Research & Projects"
-    title="연구"
-    titleEn="가나다라마바사 아자차카타파하"
-    description="재미를 만드는 작은 단서를 관찰하고, 구체적인 시스템과 플레이 가능한 프로토타입으로 검증합니다."
+    index={content.hero.index}
+    eyebrow={content.hero.eyebrow}
+    title={content.hero.title}
+    titleEn={content.hero.titleEn}
+    description={content.hero.description}
   />
 
   <section class="research-index section">
     <div class="container">
       <header class="research-index__header">
-        <p class="eyebrow">All Projects</p>
+        <p class="eyebrow">{content.listEyebrow}</p>
         <p>
-          각 연구 항목은 독립된 Markdown 파일입니다.<br />
-          파일을 추가하면 이 목록과 상세 페이지가 함께 생성됩니다.
+          {
+            content.listDescriptionLines.map((line, index) => (
+              <>{index > 0 && <br />}{line}</>
+            ))
+          }
         </p>
       </header>
 

@@ -1,7 +1,9 @@
 ---
-import { site } from "../config/site";
+import { getSiteContent } from "../lib/content";
 import CoreMark from "./CoreMark.astro";
 
+const { data: content } = await getSiteContent();
+const { site, header } = content;
 const pathname = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -9,16 +11,22 @@ const isActive = (href: string) =>
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="brand" href="/" aria-label="Ludic Core Laboratory 홈">
+    <a class="brand" href="/" aria-label={header.brandAriaLabel}>
       <CoreMark class="brand__mark" />
       <span class="brand__name">
-        <span>Ludic Core<br />Laboratory</span>
+        <span>
+          {
+            header.brandLines.map((line, index) => (
+              <>{index > 0 && <br />}{line}</>
+            ))
+          }
+        </span>
       </span>
     </a>
 
-    <nav class="desktop-nav" aria-label="주요 메뉴">
+    <nav class="desktop-nav" aria-label={header.desktopNavAriaLabel}>
       {
-        site.nav.map((item) => (
+        site.navigation.map((item) => (
           <a
             href={item.href}
             aria-current={isActive(item.href) ? "page" : undefined}
@@ -31,14 +39,14 @@ const isActive = (href: string) =>
     </nav>
 
     <details class="mobile-nav">
-      <summary aria-label="메뉴 열기">
-        <span>Menu</span>
+      <summary aria-label={header.menuOpenAriaLabel}>
+        <span>{header.menuLabel}</span>
         <i></i>
         <i></i>
       </summary>
-      <nav aria-label="모바일 메뉴">
+      <nav aria-label={header.mobileNavAriaLabel}>
         {
-          site.nav.map((item) => (
+          site.navigation.map((item) => (
             <a
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}

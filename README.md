@@ -12,9 +12,10 @@ npm run dev
 로컬 개발 서버는 기본적으로 `http://localhost:4321`에서 열립니다.
 
 ```bash
-npm run check     # Astro/TypeScript 검사
-npm run build     # dist/에 정적 사이트 생성
-npm run validate  # 검사 후 프로덕션 빌드
+npm run content:check  # 임시 문구·중복·누락 파일 검사
+npm run check          # 콘텐츠와 Astro/TypeScript 검사
+npm run build          # dist/에 정적 사이트 생성
+npm run validate       # 모든 검사 후 프로덕션 빌드
 ```
 
 ## 콘텐츠 편집
@@ -23,11 +24,40 @@ npm run validate  # 검사 후 프로덕션 빌드
 
 | 콘텐츠 | 위치 | 렌더링 위치 |
 | --- | --- | --- |
-| 연구실 소개 | `src/content/lab/*.md` | 홈, 연구실 소개 |
+| 사이트 공통 정보 | `src/content/site/global.md` | 헤더, 푸터, 공통 메타데이터 |
+| 페이지별 문구 | `src/content/pages/*.md` | 홈, 소개, 연구, 구성원, 404 |
 | 연구/프로젝트 | `src/content/projects/*.md` | 홈, 연구 목록, 자동 생성 상세 페이지 |
 | 구성원 | `src/content/members/*.md` | 홈, 구성원 소개 |
 
-각 필드는 [`src/content.config.ts`](src/content.config.ts)의 스키마로 검증됩니다. 잘못된 필드나 URL은 빌드 단계에서 발견할 수 있습니다.
+각 필드는 [`src/content.config.ts`](src/content.config.ts)의 엄격한 스키마로 검증됩니다.
+빈 필수 문구, 알 수 없는 필드, 잘못된 URL과 허용되지 않은 값은 검사 단계에서
+오류로 처리됩니다. `npm run content:check`는 임시 문구, 페이지 파일명 불일치,
+프로젝트 코드·표시 순서 중복과 누락된 구성원 사진도 검사합니다.
+
+### 사이트 문구 수정
+
+사이트명, 내비게이션, 헤더, 푸터와 여러 페이지가 공유하는 연구실 정보는
+`src/content/site/global.md`에서 관리합니다. 각 페이지 전용 문구는 파일명과 같은
+`page` 값을 가진 `src/content/pages/*.md`에서 관리합니다.
+
+```text
+src/content/
+├── site/global.md
+├── pages/home.md
+├── pages/about.md
+├── pages/research.md
+├── pages/people.md
+├── pages/404.md
+├── projects/*.md
+└── members/*.md
+```
+
+`.astro` 파일은 화면 구조와 스타일을 담당하므로 일반적인 문구 수정에는 건드릴
+필요가 없습니다. 파일 안의 한국어 주석에서 각 값이 표시되는 위치를 확인할 수
+있습니다.
+
+개별 프로젝트와 구성원 정보만 각각 `src/content/projects/*.md`,
+`src/content/members/*.md`에서 수정합니다.
 
 ### 구성원 추가 예시
 
@@ -77,7 +107,6 @@ email: "name@example.com"
 ```text
 src/
 ├── components/       재사용 가능한 UI 컴포넌트
-├── config/           사이트명과 내비게이션 설정
 ├── content/          Markdown 콘텐츠
 ├── layouts/          공통 문서 레이아웃
 ├── lib/              콘텐츠 조회·정렬 로직
@@ -87,6 +116,8 @@ src/
 
 ## 배포
 
-`main` 브랜치에 push하면 `.github/workflows/deploy.yml`이 Astro 사이트를 빌드해 GitHub Pages로 배포합니다. 저장소의 **Settings → Pages → Source**는 **GitHub Actions**로 설정해야 합니다.
+`main` 브랜치에 push하면 `.github/workflows/deploy.yml`이 `npm run validate`를
+통과한 Astro 사이트만 GitHub Pages로 배포합니다. 저장소의
+**Settings → Pages → Source**는 **GitHub Actions**로 설정해야 합니다.
 
 현재 연구/소개 문구는 초기 사이트 구성을 위한 샘플입니다. 공개 전에 실제 연구 내용과 구성원 정보로 확인·교체하세요.

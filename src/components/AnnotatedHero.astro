@@ -9,10 +9,13 @@ interface HeroLine {
 
 interface Props {
   lines: HeroLine[];
-  lead: string;
+  lead?: string;
+  metaPrimary: string;
+  metaSecondary: string;
+  scrollLabel: string;
 }
 
-const { lines, lead } = Astro.props;
+const { lines, lead, metaPrimary, metaSecondary, scrollLabel } = Astro.props;
 const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join(" ");
 ---
 
@@ -21,8 +24,8 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
   <CoreMark class="hero__core" />
 
   <div class="hero__meta">
-    <p>LCL / Ludic Core Laboratory</p>
-    <p>Game Design Research</p>
+    <p>{metaPrimary}</p>
+    <p>{metaSecondary}</p>
   </div>
 
   <h1 id="hero-title" class="hero__title" aria-label={accessibleTitle}>
@@ -39,10 +42,10 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     }
   </h1>
 
-  <div class="hero__bottom">
-    <p>{lead}</p>
+  <div class:list={["hero__bottom", { "hero__bottom--no-lead": !lead }]}>
+    {lead && <p>{lead}</p>}
     <a href="#introduction">
-      <span>Scroll to discover</span>
+      <span>{scrollLabel}</span>
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 3v17M5 13l7 7 7-7"></path>
       </svg>
@@ -186,6 +189,10 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     align-items: end;
     justify-content: space-between;
     gap: 2rem;
+  }
+
+  .hero__bottom--no-lead {
+    justify-content: flex-end;
   }
 
   .hero__bottom > p {

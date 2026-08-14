@@ -1,21 +1,32 @@
 ---
-import { site } from "../config/site";
+import { getSiteContent } from "../lib/content";
 
+const { data: content } = await getSiteContent();
+const { site, footer, wordmark } = content;
 const year = new Date().getFullYear();
+const copyright = footer.copyrightTemplate
+  .replace("{year}", String(year))
+  .replace("{shortName}", site.shortName);
 ---
 
 <footer class="site-footer">
   <div class="site-footer__top container">
     <div class="footer-intro">
-      <p class="eyebrow">Ludic Core Laboratory</p>
-      <p class="footer-intro__title">가나다라 마바사<br />아자차카타파하.</p>
+      <p class="eyebrow">{footer.eyebrow}</p>
+      <p class="footer-intro__title">
+        {
+          footer.titleLines.map((line, index) => (
+            <>{index > 0 && <br />}{line}</>
+          ))
+        }
+      </p>
     </div>
 
     <div class="footer-links">
       <div>
-        <p>Navigate</p>
+        <p>{footer.navigationLabel}</p>
         {
-          site.nav.map((item) => (
+          site.navigation.map((item) => (
             <a href={item.href}>
               <span>{item.index}</span>
               {item.label}
@@ -24,25 +35,25 @@ const year = new Date().getFullYear();
         }
       </div>
       <div>
-        <p>Connect</p>
+        <p>{footer.connectLabel}</p>
         <a href={site.github} target="_blank" rel="noreferrer">
           <span>↗</span>
-          GitHub
+          {footer.githubLabel}
         </a>
       </div>
     </div>
   </div>
 
-  <div class="footer-wordmark container" aria-label={site.name}>
-    <span>Ludic</span>
-    <span>Core</span>
-    <span>Laboratory</span>
+  <div class="footer-wordmark container" aria-label={wordmark.join(" ")}>
+    {wordmark.map((word) => <span>{word}</span>)}
   </div>
 
   <div class="site-footer__bottom container">
-    <p>© {year} {site.shortName}</p>
-    <p>Researching the core of fun.</p>
-    <a href="#top" aria-label="페이지 맨 위로 이동">Back to top ↑</a>
+    <p>{copyright}</p>
+    <p>{footer.tagline}</p>
+    <a href="#top" aria-label={footer.backToTopAriaLabel}>
+      {footer.backToTopLabel}
+    </a>
   </div>
 </footer>
 

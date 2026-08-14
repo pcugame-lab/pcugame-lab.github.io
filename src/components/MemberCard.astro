@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getPageContent, getSiteContent } from "../lib/content";
 
 interface Props {
   member: CollectionEntry<"members">;
@@ -9,6 +10,10 @@ interface Props {
 }
 
 const { member, role, group, index = 0 } = Astro.props;
+const [{ data: siteContent }, { data: peopleContent }] = await Promise.all([
+  getSiteContent(),
+  getPageContent("people"),
+]);
 const { data } = member;
 const hasPhoto = Boolean(data.photo);
 ---
@@ -42,7 +47,10 @@ const hasPhoto = Boolean(data.photo);
     </div>
     {
       data.interests.length > 0 && (
-        <ul class="member-card__interests" aria-label="관심 연구 분야">
+        <ul
+          class="member-card__interests"
+          aria-label={siteContent.accessibility.memberInterestsLabel}
+        >
           {data.interests.map((interest) => <li>{interest}</li>)}
         </ul>
       )
@@ -52,17 +60,17 @@ const hasPhoto = Boolean(data.photo);
         <div class="member-card__links">
           {data.github && (
             <a href={data.github} target="_blank" rel="noreferrer">
-              GitHub <span>↗</span>
+              {peopleContent.memberLinks.github} <span>↗</span>
             </a>
           )}
           {data.website && (
             <a href={data.website} target="_blank" rel="noreferrer">
-              Website <span>↗</span>
+              {peopleContent.memberLinks.website} <span>↗</span>
             </a>
           )}
           {data.email && (
             <a href={`mailto:${data.email}`}>
-              Email <span>↗</span>
+              {peopleContent.memberLinks.email} <span>↗</span>
             </a>
           )}
         </div>

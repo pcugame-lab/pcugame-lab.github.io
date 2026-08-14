@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getSiteContent } from "../lib/content";
 import ProjectVisual from "./ProjectVisual.astro";
 
 interface Props {
@@ -8,11 +9,15 @@ interface Props {
 }
 
 const { project, index = 0 } = Astro.props;
+const { data: content } = await getSiteContent();
 const { data } = project;
 ---
 
 <article class="project-card">
-  <a href={`/research/${project.id}/`} aria-label={`${data.title} 프로젝트 보기`}>
+  <a
+    href={`/research/${project.id}/`}
+    aria-label={`${data.title} ${content.accessibility.projectViewSuffix}`}
+  >
     <div class="project-card__meta">
       <span>{String(index + 1).padStart(2, "0")}</span>
       <span>{data.code}</span>
@@ -23,7 +28,7 @@ const { data } = project;
       <p>{data.titleEn}</p>
       <h3>{data.title}</h3>
       <p class="project-card__summary">{data.summary}</p>
-      <ul aria-label="연구 키워드">
+      <ul aria-label={content.accessibility.projectKeywordsLabel}>
         {data.tags.map((tag) => <li>{tag}</li>)}
       </ul>
       <span class="project-card__arrow" aria-hidden="true">↗</span>

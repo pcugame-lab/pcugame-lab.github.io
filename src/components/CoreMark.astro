@@ -1,10 +1,9 @@
 ---
 interface Props {
-  label?: boolean;
   class?: string;
 }
 
-const { label = false, class: className } = Astro.props;
+const { class: className } = Astro.props;
 ---
 
 <span class:list={["core-mark", className]} aria-hidden="true">
@@ -67,7 +66,6 @@ const { label = false, class: className } = Astro.props;
       <path d="M707 610 H879 L927 673 H608 L633 658 L646 658 Z"></path>
     </g>
   </svg>
-  {label && <span>LCL</span>}
 </span>
 
 <style>

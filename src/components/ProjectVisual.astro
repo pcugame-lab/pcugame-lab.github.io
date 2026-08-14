@@ -1,4 +1,6 @@
 ---
+import { getSiteContent } from "../lib/content";
+
 type Visual = "orbit" | "grid" | "wave";
 
 interface Props {
@@ -7,10 +9,11 @@ interface Props {
 }
 
 const { visual, label } = Astro.props;
+const { data: content } = await getSiteContent();
 ---
 
 <div class:list={["project-visual", `project-visual--${visual}`]}>
-  <span class="sr-only">{label} 추상 그래픽</span>
+  <span class="sr-only">{label} {content.accessibility.projectVisualSuffix}</span>
   {
     visual === "orbit" && (
       <svg viewBox="0 0 800 500" aria-hidden="true">
@@ -52,7 +55,7 @@ const { visual, label } = Astro.props;
       </svg>
     )
   }
-  <span class="project-visual__label">LCL / {label}</span>
+  <span class="project-visual__label">{content.site.shortName} / {label}</span>
 </div>
 
 <style>

@@ -1,35 +1,27 @@
 ---
-title: "Ludic Core Laboratory"
-eyebrow: "About LCL"
-heroLines:
-  - word: "재미"
-    suffix: "의"
-    annotation: "Ludic"
-  - word: "핵심"
-    suffix: "을"
-    annotation: "Core"
-  - word: "연구하다"
-    suffix: ""
-    annotation: "Laboratory"
-lead: "우리는 플레이의 순간을 관찰하고, 설계하고, 검증합니다. 사람을 몰입하게 하는 본질을 찾아 더 오래 기억되는 경험을 만듭니다."
-statement: "가나다라마바사 아자차카타파하. 하나둘 셋넷 다섯여섯."
+page: "about"
+
+seo:
+  title: "연구실 소개"
+  description: "Ludic Core Laboratory 연구실을 소개합니다."
+
+hero:
+  index: "01"
+  eyebrow: "About LCL"
+  title: "연구실"
+  titleEn: "About the Lab"
+  description: "Ludic Core Laboratory를 소개합니다."
+
+manifestoLabel: "Our Point of View"
+
+bodyMeta:
+  index: "01 — 03"
+  eyebrow: "LCL Manifesto"
+
 principles:
-  - title: "Observe"
-    label: "관찰"
-    description: "플레이어의 선택과 망설임, 몰입이 시작되고 끝나는 순간을 세심하게 봅니다."
-  - title: "Build"
-    label: "구현"
-    description: "아이디어를 플레이 가능한 프로토타입으로 빠르게 만들고 직접 경험합니다."
-  - title: "Verify"
-    label: "검증"
-    description: "직관을 데이터와 대화에 연결해 반복 가능한 디자인 지식으로 다듬습니다."
-facts:
-  - label: "Question"
-    value: "What makes play meaningful?"
-  - label: "Method"
-    value: "Observe → Build → Verify"
-  - label: "Output"
-    value: "Research & Playable Things"
+  index: "02"
+  eyebrow: "Our Process"
+  title: "재미를 만드는 세 가지 관점을 연결합니다."
 ---
 
 ## 재미는 결과가 아니라 연구의 출발점입니다

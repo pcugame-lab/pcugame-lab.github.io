@@ -2,7 +2,7 @@
 import { render, type CollectionEntry } from "astro:content";
 import ProjectVisual from "../../components/ProjectVisual.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getProjects } from "../../lib/content";
+import { getPageContent, getProjects } from "../../lib/content";
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -19,7 +19,10 @@ interface Props {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const projects = await getProjects();
+const [projects, { data: content }] = await Promise.all([
+  getProjects(),
+  getPageContent("research"),
+]);
 const currentIndex = projects.findIndex(({ id }) => id === project.id);
 const nextProject = projects[(currentIndex + 1) % projects.length];
 ---
@@ -29,7 +32,7 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
     <header class="project-detail__hero" id="top">
       <div class="container">
         <div class="project-detail__crumb">
-          <a href="/research/">Research</a>
+          <a href="/research/">{content.detail.breadcrumbLabel}</a>
           <span>/</span>
           <span>{project.data.code}</span>
         </div>
@@ -45,11 +48,11 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
         <div class="project-detail__summary">
           <dl>
             <div>
-              <dt>Year</dt>
+              <dt>{content.detail.yearLabel}</dt>
               <dd>{project.data.year}</dd>
             </div>
             <div>
-              <dt>Status</dt>
+              <dt>{content.detail.statusLabel}</dt>
               <dd>{project.data.phase}</dd>
             </div>
           </dl>
@@ -65,7 +68,7 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
     <section class="project-detail__content section">
       <div class="project-detail__content-inner container">
         <aside>
-          <p class="eyebrow">Project Note</p>
+          <p class="eyebrow">{content.detail.noteLabel}</p>
           <ul>
             {project.data.tags.map((tag) => <li>{tag}</li>)}
           </ul>
@@ -82,10 +85,10 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
       <a
         class="next-project"
         href={`/research/${nextProject.id}/`}
-        aria-label={`다음 연구: ${nextProject.data.title}`}
+        aria-label={`${content.detail.nextAriaPrefix} ${nextProject.data.title}`}
       >
         <div class="container">
-          <span>Next Project / {nextProject.data.code}</span>
+          <span>{content.detail.nextLabel} / {nextProject.data.code}</span>
           <strong>{nextProject.data.title}</strong>
           <i aria-hidden="true">→</i>
         </div>

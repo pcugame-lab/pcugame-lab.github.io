@@ -11,12 +11,12 @@ interests:
   - "DLSS"
 positions:
   - year: 2026
-    role: "Researcher"
-    group: "faculty"
+    role: "Developer"
+    group: "researcher"
     level: "member"
   - year: 2025
-    role: "Researcher"
-    group: "faculty"
+    role: "Developer"
+    group: "researcher"
     level: "member"
 github: "https://github.comSJY4852"
 email: "qw6434@gmail.com"

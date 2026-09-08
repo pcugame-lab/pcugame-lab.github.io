@@ -2,7 +2,7 @@
 name: "한지성"
 nameEn: "Jisung Han"
 monogram: "HJS"
-photo: "/images/members/23한지성.webp"
+photo: "/images/members/23-han-jisung.webp"
 interests:
   - "Graphics"
   - "Reverse Engineering"

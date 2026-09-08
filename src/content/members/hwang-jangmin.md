@@ -6,10 +6,10 @@ interests: []
 positions:
   - year: 2026
     role: "Researcher"
-    group: "researcher"
+    group: "Graduate Student"
     level: "member"
   - year: 2025
     role: "Lab Director"
-    group: "faculty"
+    group: "Undergraduate"
     level: "leadership"
 ---

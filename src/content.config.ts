@@ -243,7 +243,7 @@ const members = defineCollection({
         z.strictObject({
           year: z.number().int().min(2000).max(2100),
           role: text,
-          group: z.enum(["faculty", "researcher", "student", "alumni"]),
+          group: z.enum(["Undergraduate", "Graduate Student"]),
           level: z.enum(["leadership", "member"]).default("member"),
         }),
       )

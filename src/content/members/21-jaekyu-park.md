@@ -9,11 +9,11 @@ interests:
 positions:
   - year: 2026
     role: "Lab Director"
-    group: "faculty"
+    group: "Undergraduate"
     level: "leadership"
   - year: 2025
     role: "Researcher"
-    group: "faculty"
+    group: "Undergraduate"
     level: "member"
 github: "https://github.com/jekey7"
 ---

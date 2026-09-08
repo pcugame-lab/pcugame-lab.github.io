@@ -81,6 +81,7 @@ const site = defineCollection({
     accessibility: z.strictObject({
       skipLinkLabel: text,
       memberInterestsLabel: text,
+      memberInterestsMoreLabel: text,
       projectKeywordsLabel: text,
       projectViewSuffix: text,
       projectVisualSuffix: text,
@@ -181,7 +182,6 @@ const peoplePageSchema = z.strictObject({
   statusYearSuffix: text,
   statusCountSuffix: text,
   leadershipLabel: text,
-  teamLabel: text,
   membersLabel: text,
   emptyLabel: text,
   joinEyebrow: text,
@@ -243,7 +243,7 @@ const members = defineCollection({
         z.strictObject({
           year: z.number().int().min(2000).max(2100),
           role: text,
-          group: z.enum(["faculty", "researcher", "student", "alumni"]),
+          group: z.enum(["Undergraduate", "Graduate Student"]),
           level: z.enum(["leadership", "member"]).default("member"),
         }),
       )

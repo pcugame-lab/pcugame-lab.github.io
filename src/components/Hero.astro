@@ -9,17 +9,36 @@ interface HeroLine {
 
 interface Props {
   lines: HeroLine[];
-  lead?: string;
   metaPrimary: string;
   metaSecondary: string;
-  scrollLabel: string;
+  /** 서브페이지 타이틀 아래 이탤릭 영문 (About the Lab 등) */
+  titleEn?: string;
+  /** 하단 본문 설명 */
+  description?: string;
+  /** 홈에서만 쓰는 스크롤 안내 링크 */
+  scrollLabel?: string;
+  scrollHref?: string;
 }
 
-const { lines, lead, metaPrimary, metaSecondary, scrollLabel } = Astro.props;
+const {
+  lines,
+  metaPrimary,
+  metaSecondary,
+  titleEn,
+  description,
+  scrollLabel,
+  scrollHref = "#introduction",
+} = Astro.props;
+
 const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join(" ");
+const isStacked = lines.length > 1;
 ---
 
-<section class="hero" id="top" aria-labelledby="hero-title">
+<section
+  class:list={["hero", { "hero--stacked": isStacked }]}
+  id="top"
+  aria-labelledby="hero-title"
+>
   <div class="hero__grid" aria-hidden="true"></div>
   <CoreMark class="hero__core" />
 
@@ -28,28 +47,35 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     <p>{metaSecondary}</p>
   </div>
 
-  <h1 id="hero-title" class="hero__title" aria-label={accessibleTitle}>
+  <div class="hero__titleblock">
+    <h1 id="hero-title" class="hero__title" aria-label={accessibleTitle}>
     {
       lines.map((line, index) => (
         <span class={`hero__line hero__line--${index + 1}`} aria-hidden="true">
           <span class="hero__word">
             {line.word}
-            <em>{line.annotation}</em>
+            {line.annotation && <em>{line.annotation}</em>}
           </span>
           {line.suffix && <span class="hero__suffix">{line.suffix}</span>}
         </span>
       ))
     }
-  </h1>
+    </h1>
+    {titleEn && <p class="hero__title-en">{titleEn}</p>}
+  </div>
 
-  <div class:list={["hero__bottom", { "hero__bottom--no-lead": !lead }]}>
-    {lead && <p>{lead}</p>}
-    <a href="#introduction">
-      <span>{scrollLabel}</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 3v17M5 13l7 7 7-7"></path>
-      </svg>
-    </a>
+  <div class="hero__bottom">
+    {description && <p class="hero__description">{description}</p>}
+    {
+      scrollLabel && (
+        <a class="hero__scroll" href={scrollHref}>
+          <span>{scrollLabel}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v17M5 13l7 7 7-7" />
+          </svg>
+        </a>
+      )
+    }
   </div>
 </section>
 
@@ -57,11 +83,12 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
   .hero {
     position: relative;
     display: grid;
-    min-height: calc(100svh - var(--header-height));
+    min-height: calc(70svh - var(--header-height));
     padding: clamp(1.25rem, 2vw, 2rem) var(--page-gutter)
       clamp(1.5rem, 3vw, 3rem);
     color: var(--white);
     background: var(--ink);
+    border-bottom: 1px solid var(--line-dark);
     grid-template-rows: auto 1fr auto;
     overflow: hidden;
     isolation: isolate;
@@ -91,18 +118,25 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     content: "";
   }
 
+  /* 코어 마크는 타이틀 행(1fr) 안에 갇혀 하단 텍스트를 침범하지 않습니다. */
   :global(.hero__core) {
     position: absolute;
     z-index: -1;
-    top: 16%;
-    right: 8%;
-    width: clamp(13rem, 26vw, 31rem);
-    height: clamp(13rem, 26vw, 31rem);
+    top: 50%;
+    right: 6%;
+    width: clamp(11rem, 24vw, 28rem);
+    height: clamp(11rem, 24vw, 28rem);
     color: #292929;
+    transform: translateY(-50%);
+    pointer-events: none;
   }
 
   .hero__meta {
+    z-index: 1;
     display: flex;
+    width: 100%;
+    max-width: var(--content-width);
+    margin-inline: auto;
     justify-content: space-between;
     color: #747470;
     font-size: 0.6rem;
@@ -115,19 +149,38 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     margin: 0;
   }
 
-  .hero__title {
+  .hero__titleblock {
     z-index: 1;
-    display: flex;
     width: 100%;
     max-width: var(--content-width);
-    margin: clamp(2rem, 4vh, 4rem) auto;
+    margin: clamp(1.25rem, 2.5vh, 2.5rem) auto;
     align-self: center;
+  }
+
+  .hero__title {
+    display: flex;
+    margin: 0;
     flex-direction: column;
     row-gap: 0.06em;
-    font-size: clamp(5.1rem, 12.5vw, 14rem);
+    font-size: clamp(3.06rem, 7.5vw, 8.4rem);
     font-weight: 700;
     line-height: 0.92;
     letter-spacing: 0;
+  }
+
+  .hero--stacked {
+    padding-bottom: clamp(0.75rem, 1.5vw, 1.5rem);
+  }
+
+  /* 홈: 아래 여백을 줄이고 위를 키워 타이틀만 내립니다. */
+  .hero--stacked .hero__titleblock {
+    margin-block: clamp(4rem, 8vh, 7rem) 0;
+  }
+
+  /* 단일 줄(서브페이지)은 자간을 좁혀 원래 PageHero 조판을 유지합니다. */
+  .hero:not(.hero--stacked) .hero__title {
+    line-height: 0.82;
+    letter-spacing: -0.09em;
   }
 
   .hero__line {
@@ -135,13 +188,17 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     align-items: baseline;
   }
 
-  .hero__line--2 {
-    margin-left: 19vw;
+  .hero__line--1 {
+    margin-left: 5vw;
   }
 
-  .hero__line--3 {
+  .hero--stacked .hero__line--2 {
+    margin-left: 15vw;
+  }
+
+  .hero--stacked .hero__line--3 {
     margin-top: 0.09em;
-    margin-left: 5vw;
+    margin-left: 7vw;
   }
 
   .hero__word {
@@ -182,33 +239,45 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
 
   .hero__bottom {
     z-index: 1;
-    display: flex;
+    display: grid;
     width: 100%;
     max-width: var(--content-width);
     margin-inline: auto;
     align-items: end;
-    justify-content: space-between;
-    gap: 2rem;
+    column-gap: 3rem;
+    grid-template-columns: minmax(12rem, 0.8fr) minmax(18rem, 1.2fr);
+    row-gap: 1.5rem;
   }
 
-  .hero__bottom--no-lead {
-    justify-content: flex-end;
+  .hero__title-en {
+    margin: 0.6em 0 0;
+    padding-left: 5vw;
+    color: #888;
+    font-size: clamp(1.4rem, 2.7vw, 3rem);
+    font-style: italic;
+    letter-spacing: -0.04em;
   }
 
-  .hero__bottom > p {
-    max-width: 34rem;
+  .hero__description {
+    max-width: 38rem;
     margin: 0;
-    color: #c1c1bc;
-    font-size: clamp(0.92rem, 1.2vw, 1.1rem);
-    line-height: 1.7;
+    justify-self: end;
+    grid-column: 2;
+    color: #b9b9b4;
+    font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+    line-height: 1.75;
+    text-align: right;
     word-break: keep-all;
   }
 
-  .hero__bottom a {
+  /* 스크롤 링크는 항상 마지막 열 오른쪽 끝에 붙습니다. */
+  .hero__scroll {
     display: inline-flex;
     padding: 0.9rem 0;
     align-items: center;
+    justify-self: end;
     gap: 1.25rem;
+    grid-column: 2;
     border-bottom: 1px solid #555;
     color: #999;
     font-size: 0.62rem;
@@ -218,7 +287,7 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     text-transform: uppercase;
   }
 
-  .hero__bottom svg {
+  .hero__scroll svg {
     width: 1rem;
     fill: none;
     stroke: currentColor;
@@ -227,17 +296,16 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
 
   @media (max-width: 60rem) {
     .hero__title {
-      font-size: clamp(4.8rem, 15.5vw, 9rem);
+      font-size: clamp(2.88rem, 9.3vw, 5.4rem);
     }
 
-    .hero__line--2 {
+    .hero--stacked .hero__line--2 {
       margin-left: 12vw;
     }
   }
 
   @media (max-width: 48rem) {
     .hero {
-      min-height: calc(100svh - var(--header-height));
       padding-top: 1rem;
     }
 
@@ -246,24 +314,34 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     }
 
     :global(.hero__core) {
-      top: 18%;
-      right: -4%;
-      width: 65vw;
-      height: 65vw;
+      right: -12%;
+      width: 60vw;
+      height: 60vw;
+    }
+
+    .hero__titleblock {
+      margin-block: 2.5rem;
     }
 
     .hero__title {
-      margin-block: 4rem;
-      font-size: clamp(4.35rem, 21vw, 8rem);
+      font-size: clamp(2.61rem, 12.6vw, 4.8rem);
       row-gap: 0.09em;
       line-height: 0.94;
     }
 
-    .hero__line--2 {
+    .hero__line--1 {
+      margin-left: 0;
+    }
+
+    .hero__title-en {
+      padding-left: 0;
+    }
+
+    .hero--stacked .hero__line--2 {
       margin-left: 0.38em;
     }
 
-    .hero__line--3 {
+    .hero--stacked .hero__line--3 {
       margin-top: 0.2em;
       margin-left: 0;
       font-size: 0.74em;
@@ -282,24 +360,31 @@ const accessibleTitle = lines.map(({ word, suffix }) => `${word}${suffix}`).join
     }
 
     .hero__bottom {
-      align-items: start;
-      flex-direction: column;
-      gap: 1rem;
+      grid-template-columns: 1fr;
+      row-gap: 1rem;
     }
 
-    .hero__bottom > p {
-      max-width: 27rem;
-      font-size: 0.86rem;
+    .hero__description,
+    .hero__scroll {
+      grid-column: auto;
     }
 
-    .hero__bottom a {
-      align-self: flex-end;
+    .hero__description {
+      text-align: left;
+    }
+
+    .hero__description {
+      justify-self: start;
+    }
+
+    .hero__scroll {
+      justify-self: end;
     }
   }
 
   @media (max-width: 25rem) {
     .hero__title {
-      font-size: 19vw;
+      font-size: 11.4vw;
     }
   }
 </style>

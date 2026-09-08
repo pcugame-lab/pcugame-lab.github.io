@@ -7,12 +7,12 @@ interests:
   - "Web Development"
 positions:
   - year: 2026
-    role: "Developer"
-    group: "researcher"
+    role: "Researcher"
+    group: "Undergraduate"
     level: "member"
   - year: 2025
-    role: "Developer"
-    group: "researcher"
+    role: "Researcher"
+    group: "Undergraduate"
     level: "member"
 github: "https://github.com/bipolarrr"
 ---

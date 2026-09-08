@@ -6,9 +6,10 @@ seo:
   description: "Ludic Core Laboratory의 연구 질문과 플레이 가능한 프로젝트를 소개합니다."
 
 hero:
-  index: "02"
-  eyebrow: "Research & Projects"
-  title: "연구"
+  lines:
+    - word: "연구"
+  metaPrimary: "02"
+  metaSecondary: "Research & Projects"
   titleEn: "Questions Made Playable"
   description: "재미를 만드는 작은 단서를 관찰하고, 구체적인 시스템과 플레이 가능한 프로토타입으로 검증합니다."
 

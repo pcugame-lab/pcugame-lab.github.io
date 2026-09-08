@@ -13,10 +13,16 @@ const seoSchema = z.strictObject({
   description: text,
 });
 
+const heroLineSchema = z.strictObject({
+  word: text,
+  suffix: z.string().trim().default(""),
+  annotation: z.string().trim().default(""),
+});
+
 const pageHeroSchema = z.strictObject({
-  index: text,
-  eyebrow: text,
-  title: text,
+  lines: z.array(heroLineSchema).min(1),
+  metaPrimary: text,
+  metaSecondary: text,
   titleEn: text,
   description: text,
 });
@@ -98,18 +104,11 @@ const site = defineCollection({
 const homePageSchema = z.strictObject({
   page: z.literal("home"),
   hero: z.strictObject({
-    lines: z
-      .array(
-        z.strictObject({
-          word: text,
-          suffix: z.string().trim().default(""),
-          annotation: text,
-        }),
-      )
-      .length(3),
-    lead: text.optional(),
+    lines: z.array(heroLineSchema).length(3),
     metaPrimary: text,
     metaSecondary: text,
+    titleEn: text.optional(),
+    description: text.optional(),
     scrollLabel: text,
   }),
   intro: z.strictObject({

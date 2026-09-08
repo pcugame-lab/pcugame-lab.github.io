@@ -1,5 +1,5 @@
 ---
-import PageHero from "../../components/PageHero.astro";
+import Hero from "../../components/Hero.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getPageContent, getProjects } from "../../lib/content";
@@ -14,10 +14,10 @@ const [projects, { data: content }] = await Promise.all([
   title={content.seo.title}
   description={content.seo.description}
 >
-  <PageHero
-    index={content.hero.index}
-    eyebrow={content.hero.eyebrow}
-    title={content.hero.title}
+  <Hero
+    lines={content.hero.lines}
+    metaPrimary={content.hero.metaPrimary}
+    metaSecondary={content.hero.metaSecondary}
     titleEn={content.hero.titleEn}
     description={content.hero.description}
   />
@@ -26,13 +26,6 @@ const [projects, { data: content }] = await Promise.all([
     <div class="container">
       <header class="research-index__header">
         <p class="eyebrow">{content.listEyebrow}</p>
-        <p>
-          {
-            content.listDescriptionLines.map((line, index) => (
-              <>{index > 0 && <br />}{line}</>
-            ))
-          }
-        </p>
       </header>
 
       <div class="research-index__grid">
@@ -52,21 +45,9 @@ const [projects, { data: content }] = await Promise.all([
   }
 
   .research-index__header {
-    display: grid;
     margin-bottom: clamp(4rem, 8vw, 8rem);
     padding-bottom: 2rem;
-    grid-template-columns: 1fr 1fr;
     border-bottom: 1px solid var(--line);
-  }
-
-  .research-index__header > p:last-child {
-    max-width: 34rem;
-    margin: 0;
-    justify-self: end;
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    word-break: keep-all;
   }
 
   .research-index__grid {
@@ -83,14 +64,6 @@ const [projects, { data: content }] = await Promise.all([
     .research-index__header,
     .research-index__grid {
       grid-template-columns: 1fr;
-    }
-
-    .research-index__header {
-      gap: 2rem;
-    }
-
-    .research-index__header > p:last-child {
-      justify-self: start;
     }
 
     .research-index__grid {

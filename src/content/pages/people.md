@@ -6,9 +6,10 @@ seo:
   description: "Ludic Core Laboratory를 함께 만드는 연구자들을 소개합니다."
 
 hero:
-  index: "03"
-  eyebrow: "People"
-  title: "구성원"
+  lines:
+    - word: "구성원"
+  metaPrimary: "03"
+  metaSecondary: "People"
   titleEn: "People Behind the Play"
   description: "서로 다른 관심과 기술을 가진 사람들이 같은 질문을 각자의 방식으로 탐구합니다."
 

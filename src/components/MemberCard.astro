@@ -6,10 +6,9 @@ interface Props {
   member: CollectionEntry<"members">;
   role: string;
   group: string;
-  index?: number;
 }
 
-const { member, role, group, index = 0 } = Astro.props;
+const { member, role, group } = Astro.props;
 const [{ data: siteContent }, { data: peopleContent }] = await Promise.all([
   getSiteContent(),
   getPageContent("people"),
@@ -36,7 +35,6 @@ const hiddenInterestCount = data.interests.length - visibleInterests.length;
       loading="lazy"
       decoding="async"
     />
-    <small>{String(index + 1).padStart(2, "0")}</small>
   </div>
 
   <div class="member-card__info">
@@ -144,15 +142,6 @@ const hiddenInterestCount = data.interests.length - visibleInterests.length;
     height: auto;
     opacity: 0.88;
     filter: invert(1);
-  }
-
-  .member-card__visual small {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    color: #858581;
-    font-size: 0.575rem;
-    font-weight: 700;
   }
 
   .member-card__info {

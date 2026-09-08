@@ -182,7 +182,6 @@ const peoplePageSchema = z.strictObject({
   statusYearSuffix: text,
   statusCountSuffix: text,
   leadershipLabel: text,
-  teamLabel: text,
   membersLabel: text,
   emptyLabel: text,
   joinEyebrow: text,

@@ -12,17 +12,15 @@ const [members, { data: siteContent }, { data: content }] = await Promise.all([
   getPageContent("people"),
 ]);
 const renderedMembers = await Promise.all(
-  members.map(async (member, memberIndex) => ({
+  members.map(async (member) => ({
     member,
-    memberIndex,
     Content: (await render(member)).Content,
   })),
 );
 const positionHistory = renderedMembers.flatMap(
-  ({ member, memberIndex, Content }) =>
+  ({ member, Content }) =>
     member.data.positions.map((position) => ({
       member,
-      memberIndex,
       Content,
       position,
     })),
@@ -120,7 +118,7 @@ const memberCountByYear = new Map(
         <div class="org-chart__leadership">
           {
             leadershipPositions.map(
-              ({ member, memberIndex, Content, position }) => (
+              ({ member, Content, position }) => (
                 <div
                   class="org-chart__lead-node"
                   data-org-member
@@ -132,7 +130,6 @@ const memberCountByYear = new Map(
                     member={member}
                     role={position.role}
                     group={position.group}
-                    index={memberIndex}
                   >
                     <Content />
                   </MemberCard>
@@ -142,17 +139,13 @@ const memberCountByYear = new Map(
           }
         </div>
 
-        <div class="org-chart__branch" aria-hidden="true">
-          <span>{content.teamLabel}</span>
-        </div>
-
         <p class="org-chart__level org-chart__level--members">
           {content.membersLabel}
         </p>
         <div class="org-chart__members">
           {
             memberPositions.map(
-              ({ member, memberIndex, Content, position }) => (
+              ({ member, Content, position }) => (
                 <div
                   class="org-chart__member-node"
                   data-org-member
@@ -164,7 +157,6 @@ const memberCountByYear = new Map(
                     member={member}
                     role={position.role}
                     group={position.group}
-                    index={memberIndex}
                   >
                     <Content />
                   </MemberCard>
@@ -301,8 +293,8 @@ const memberCountByYear = new Map(
     margin-bottom: clamp(3rem, 5vw, 5rem);
     align-items: center;
     justify-content: space-between;
-    color: var(--muted);
-    font-size: 0.65rem;
+    color: var(--ink);
+    font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -310,7 +302,7 @@ const memberCountByYear = new Map(
 
   .org-chart__status span:last-child {
     display: inline-flex;
-    width: 2.5rem;
+    width: 3rem;
     aspect-ratio: 1;
     align-items: center;
     justify-content: center;
@@ -322,14 +314,14 @@ const memberCountByYear = new Map(
   .org-chart__level {
     margin: 0 0 1rem;
     color: var(--muted);
-    font-size: 0.55rem;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
   .org-chart__level--members {
-    margin-top: -0.5rem;
+    margin-top: clamp(4.5rem, 7vw, 7rem);
   }
 
   .org-chart__leadership {
@@ -340,46 +332,6 @@ const memberCountByYear = new Map(
 
   .org-chart__lead-node {
     width: var(--card-width);
-  }
-
-  .org-chart__branch {
-    position: relative;
-    height: clamp(4.5rem, 7vw, 7rem);
-  }
-
-  .org-chart__branch::before {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 1px;
-    height: 50%;
-    background: var(--line);
-    content: "";
-  }
-
-  .org-chart__branch::after {
-    position: absolute;
-    top: 50%;
-    right: 12.5%;
-    left: 12.5%;
-    height: 1px;
-    background: var(--line);
-    content: "";
-  }
-
-  .org-chart__branch span {
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    padding: 0.4rem 0.8rem;
-    color: var(--muted);
-    background: var(--paper);
-    font-size: 0.52rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    transform: translate(-50%, -50%);
-    text-transform: uppercase;
   }
 
   .org-chart__members {
@@ -394,16 +346,6 @@ const memberCountByYear = new Map(
     position: relative;
   }
 
-  .org-chart__member-node::before {
-    position: absolute;
-    top: clamp(-3.5rem, -3.5vw, -2.25rem);
-    left: 50%;
-    width: 1px;
-    height: clamp(2.25rem, 3.5vw, 3.5rem);
-    background: var(--line);
-    content: "";
-  }
-
   .org-chart__empty {
     margin: 4rem 0 0;
     padding: 4rem 1rem;
@@ -414,8 +356,6 @@ const memberCountByYear = new Map(
 
   .org-chart[data-has-director="false"] .org-chart__level--leadership,
   .org-chart[data-has-director="false"] .org-chart__leadership,
-  .org-chart[data-has-director="false"] .org-chart__branch,
-  .org-chart[data-has-members="false"] .org-chart__branch,
   .org-chart[data-has-members="false"] .org-chart__level--members,
   .org-chart[data-has-members="false"] .org-chart__members {
     display: none;
@@ -474,15 +414,6 @@ const memberCountByYear = new Map(
       width: 100%;
     }
 
-    .org-chart__branch::after {
-      right: 50%;
-      left: 50%;
-    }
-
-    .org-chart__branch span {
-      white-space: nowrap;
-    }
-
     .org-chart__members {
       grid-template-columns: 1fr;
     }
@@ -493,10 +424,6 @@ const memberCountByYear = new Map(
 
     .org-chart__member-node + .org-chart__member-node {
       margin-top: 1rem;
-    }
-
-    .org-chart__member-node::before {
-      display: none;
     }
   }
 

@@ -81,6 +81,7 @@ const site = defineCollection({
     accessibility: z.strictObject({
       skipLinkLabel: text,
       memberInterestsLabel: text,
+      memberInterestsMoreLabel: text,
       projectKeywordsLabel: text,
       projectViewSuffix: text,
       projectVisualSuffix: text,

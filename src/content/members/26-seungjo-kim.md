@@ -5,8 +5,8 @@ monogram: "KSJ"
 interests: []
 positions:
   - year: 2026
-    role: "Developer"
-    group: "Student"
+    role: "Researcher"
+    group: "Undergraduate"
     level: "member"
 github: "https://github.com/vvin-vv"
 email: "vhar_4120@naver.com"

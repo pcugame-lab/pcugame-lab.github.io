@@ -157,7 +157,6 @@ const researchPageSchema = z.strictObject({
   seo: seoSchema,
   hero: pageHeroSchema,
   listEyebrow: text,
-  listDescriptionLines: z.array(text).length(2),
   detail: z.strictObject({
     breadcrumbLabel: text,
     yearLabel: text,

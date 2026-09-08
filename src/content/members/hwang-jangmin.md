@@ -1,7 +1,7 @@
 ---
 name: "황장민"
 nameEn: "Hwang Jangmin"
-monogram: "PJK"
+monogram: "HJM"
 interests: []
 positions:
   - year: 2026

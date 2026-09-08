@@ -1,8 +1,11 @@
 ---
 name: "박재규"
-nameEn: "Jaegyu Park"
+nameEn: "Jaekyu Park"
 monogram: "PJK"
-interests: []
+photo: "/images/members/21-jaekyu-park.png"
+interests:
+  - "Programming"
+  - "AI"
 positions:
   - year: 2026
     role: "Lab Director"
@@ -12,4 +15,7 @@ positions:
     role: "Researcher"
     group: "faculty"
     level: "member"
+github: "https://github.com/jekey7"
 ---
+
+혁신과 즐거움의 자유를 꿈꿉니다.

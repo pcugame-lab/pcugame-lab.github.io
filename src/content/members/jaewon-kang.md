@@ -7,8 +7,8 @@ interests:
   - "GAME DESIGN"
 positions:
   - year: 2026
-    role: "Developer"
-    group: "student"
+    role: "Researcher"
+    group: "Undergraduate"
     level: "member"
 email: "krdwodnjs0214@gmail.com"
 ---

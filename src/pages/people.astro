@@ -1,7 +1,7 @@
 ---
 import { render } from "astro:content";
 import MemberCard from "../components/MemberCard.astro";
-import PageHero from "../components/PageHero.astro";
+import Hero from "../components/Hero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getMembers, getPageContent, getSiteContent } from "../lib/content";
 import { sortPositionedMembers } from "../lib/member-sort";
@@ -49,10 +49,10 @@ const memberCountByYear = new Map(
   title={content.seo.title}
   description={content.seo.description}
 >
-  <PageHero
-    index={content.hero.index}
-    eyebrow={content.hero.eyebrow}
-    title={content.hero.title}
+  <Hero
+    lines={content.hero.lines}
+    metaPrimary={content.hero.metaPrimary}
+    metaSecondary={content.hero.metaSecondary}
     titleEn={content.hero.titleEn}
     description={content.hero.description}
   />

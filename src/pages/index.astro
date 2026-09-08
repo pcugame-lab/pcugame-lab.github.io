@@ -1,5 +1,5 @@
 ---
-import AnnotatedHero from "../components/AnnotatedHero.astro";
+import Hero from "../components/Hero.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -29,11 +29,12 @@ const currentMembers = sortPositionedMembers(
 ---
 
 <BaseLayout>
-  <AnnotatedHero
+  <Hero
     lines={homeContent.data.hero.lines}
-    lead={homeContent.data.hero.lead}
     metaPrimary={homeContent.data.hero.metaPrimary}
     metaSecondary={homeContent.data.hero.metaSecondary}
+    titleEn={homeContent.data.hero.titleEn}
+    description={homeContent.data.hero.description}
     scrollLabel={homeContent.data.hero.scrollLabel}
   />
 

@@ -71,7 +71,7 @@ lab:
     - title: "Fun"
       label: "재미"
       description: "진짜 재미란 무엇인가?"
-    - title: "Engineer"
+    - title: "Engineering"
       label: "공학"
       description: "전자기기에서 실행하는 모든 것."
     - title: "Programming"

@@ -15,8 +15,8 @@ hero:
 
 introEyebrow: "Lab Members"
 introLines:
-  - "서로 다른 전문성과 관심이 모여,"
-  - "함께 플레이의 가능성을 탐구합니다."
+  - "서로 다른 사람들이 모여"
+  - "새로운 가능성을 탐구합니다."
 
 organizationEyebrow: "Organization"
 organizationTitle: "연도별 조직도"

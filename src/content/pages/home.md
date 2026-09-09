@@ -27,9 +27,9 @@ intro:
 # 02번 연구 영역
 research:
   index: "02"
-  eyebrow: "Researches"
-  title: "학기 별 연구과제"
-  description: "본인이 선택한 연구과제에 대해, 탐구하고 발표합니다."
+  eyebrow: "Research"
+  title: "학기별 연구과제"
+  description: "선택한 연구과제에 대해 탐구하고 발표합니다."
   linkLabel: "모든 연구 보기"
 
 # 03번 작업 방식 영역

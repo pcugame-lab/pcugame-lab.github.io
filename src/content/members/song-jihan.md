@@ -3,7 +3,6 @@ name: "송지한"
 nameEn: "Jihan Song"
 monogram: "SJH"
 photo: "/images/members/song-jihan.webp"
-photoWide: "/images/members/song-jihan-wide.webp"
 interests:
   - "Code Agents"
   - "Web Development"

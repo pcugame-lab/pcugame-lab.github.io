@@ -29,17 +29,12 @@ const hiddenInterestCount = data.interests.length - visibleInterests.length;
     ]}
     aria-hidden="true"
   >
-    {data.photo && data.photoWide ? (
-      <picture>
-        <source media="(max-width: 48rem)" srcset={data.photoWide} type="image/webp" />
-        <img src={data.photo} alt="" loading="lazy" decoding="async" />
-      </picture>
-    ) : <img
+    <img
       src={data.photo ?? "/lcl-logo.svg"}
       alt=""
       loading="lazy"
       decoding="async"
-    />}
+    />
   </div>
 
   <div class="member-card__info">
@@ -138,13 +133,7 @@ const hiddenInterestCount = data.interests.length - visibleInterests.length;
     content: "";
   }
 
-  .member-card__visual > picture {
-    position: absolute;
-    inset: 0;
-  }
-
-  .member-card__visual > img,
-  .member-card__visual > picture > img {
+  .member-card__visual > img {
     display: block;
     width: 100%;
     height: 100%;
@@ -329,6 +318,16 @@ const hiddenInterestCount = data.interests.length - visibleInterests.length;
     .member-card__visual {
       flex: none;
       aspect-ratio: 16 / 10;
+    }
+
+    .member-card__visual:not(.member-card__visual--placeholder) {
+      background: #000;
+    }
+
+    .member-card__visual:not(.member-card__visual--placeholder) > img {
+      position: absolute;
+      inset: 0;
+      object-fit: contain;
     }
 
     /* 세로 카드에서는 5행 고정 해제 */

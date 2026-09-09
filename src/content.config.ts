@@ -270,7 +270,6 @@ const members = defineCollection({
     nameEn: text,
     monogram: text.max(4).optional(),
     photo: text.regex(/^\//, "사진 경로는 /images/... 형식이어야 합니다.").optional(),
-    photoWide: text.regex(/^\//, "사진 경로는 /images/... 형식이어야 합니다.").optional(),
     interests: z.array(text),
     positions: z
       .array(

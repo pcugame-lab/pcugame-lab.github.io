@@ -2,7 +2,7 @@
 name: "박재규"
 nameEn: "Jaekyu Park"
 monogram: "PJK"
-photo: "/images/members/21-jaekyu-park.png"
+photo: "/images/members/21-jaekyu-park.webp"
 interests:
   - "Programming"
   - "AI"

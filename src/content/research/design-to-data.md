@@ -3,6 +3,8 @@ title: "Design-to-Data"
 titleEn: "Design-to-Data: A Machine-Verifiable Intermediate Representation Pipeline for Unity Scene Generation from Natural-Language Game Design Documents"
 summary: "자연어 게임 기획서를 검증 가능한 선언적 중간표현으로 옮기고, 결정론적 실행기가 Unity 씬을 구성하도록 생성 과정을 명세와 실행으로 분리합니다."
 code: "R—04"
+members:
+  - "박재규"
 year: "2026"
 phase: "Ongoing"
 tags:

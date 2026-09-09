@@ -18,9 +18,12 @@ site:
     - href: "/research/"
       label: "Research"
       index: "02"
+    - href: "/projects/"
+      label: "Projects"
+      index: "03"
     - href: "/people/"
       label: "People"
-      index: "03"
+      index: "04"
 
 # 모든 페이지 상단의 공통 헤더
 header:
@@ -54,7 +57,10 @@ accessibility:
   memberInterestsLabel: "관심 연구 분야"
   # {count}는 카드에 표시되지 않은 나머지 태그 수로 교체됩니다.
   memberInterestsMoreLabel: "외 {count}개"
-  projectKeywordsLabel: "연구 키워드"
+  projectKeywordsLabel: "프로젝트 키워드"
+  researchKeywordsLabel: "연구 키워드"
+  researchViewSuffix: "연구 보기"
+  participantsLabel: "참여자"
   projectViewSuffix: "프로젝트 보기"
   projectVisualSuffix: "추상 그래픽"
 

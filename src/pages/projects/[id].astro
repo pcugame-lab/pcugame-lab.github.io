@@ -1,8 +1,8 @@
 ---
 import ActivityDetail from "../../components/ActivityDetail.astro";
-import { getResearch, type Activity } from "../../lib/content";
+import { getProjects, type Activity } from "../../lib/content";
 export async function getStaticPaths() {
-  return (await getResearch()).map((project) => ({ params: { id: project.id }, props: { project } }));
+  return (await getProjects()).map((project) => ({ params: { id: project.id }, props: { project } }));
 }
 interface Props { project: Activity }
 const { project } = Astro.props;

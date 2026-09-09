@@ -8,7 +8,7 @@ seo:
 hero:
   lines:
     - word: "구성원"
-  metaPrimary: "03"
+  metaPrimary: "04"
   metaSecondary: "People"
   titleEn: "People Behind the Play"
   description: "서로 다른 관심과 기술을 가진 사람들이 같은 질문을 각자의 방식으로 탐구합니다."
@@ -33,6 +33,14 @@ joinTitleLines:
   - "함께 질문하고,"
   - "직접 만들어봅니다."
 joinLinkLabel: "GitHub에서 만나기"
+
+profile:
+  historyLabel: "연도별 직책"
+  researchLabel: "참여 연구"
+  projectsLabel: "참여 프로젝트"
+  emptyResearchLabel: "등록된 참여 연구가 없습니다."
+  emptyProjectsLabel: "등록된 참여 프로젝트가 없습니다."
+  backLabel: "전체 구성원 보기"
 
 memberLinks:
   github: "GitHub"

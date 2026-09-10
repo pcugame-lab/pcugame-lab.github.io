@@ -32,7 +32,7 @@ const nextProject = projects.length > 1 ? projects[(currentIndex + 1) % projects
         <div class="project-detail__title">
           <div>
             <p>{project.data.titleEn}</p>
-            <h1>{project.data.title}</h1>
+            <h1 data-fit-title>{project.data.title}</h1>
           </div>
           <span>{project.data.code}</span>
         </div>
@@ -92,6 +92,45 @@ const nextProject = projects.length > 1 ? projects[(currentIndex + 1) % projects
   }
 </BaseLayout>
 
+<script>
+  const title = document.querySelector<HTMLElement>("[data-fit-title]");
+  if (title) {
+    const fit = () => {
+      title.style.removeProperty("font-size");
+      const base = parseFloat(getComputedStyle(title).fontSize);
+      // Keep short titles at hero size; fit longer ones into two desktop or
+      // three mobile lines, with a readable lower bound and no truncation.
+      const lines = window.matchMedia("(max-width: 48rem)").matches ? 3 : 2;
+      const minimum = Math.min(base, Math.max(28, base * 0.6));
+      const fits = () => title.scrollHeight <= parseFloat(getComputedStyle(title).lineHeight) * lines + 1
+        && title.scrollWidth <= title.clientWidth + 1;
+      if (fits()) return;
+      let low = minimum;
+      let high = base;
+      for (let step = 0; step < 10; step++) {
+        const size = (low + high) / 2;
+        title.style.fontSize = `${size}px`;
+        if (fits()) low = size;
+        else high = size;
+      }
+      title.style.fontSize = `${Math.floor(low * 10) / 10}px`;
+    };
+    let frame = 0;
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(fit);
+    };
+    let width = 0;
+    new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width === width) return;
+      width = entry.contentRect.width;
+      schedule();
+    }).observe(title.parentElement!);
+    window.addEventListener("resize", schedule);
+    document.fonts.ready.then(schedule);
+  }
+</script>
+
 <style>
   .project-detail {
     background: var(--paper);
@@ -122,7 +161,7 @@ const nextProject = projects.length > 1 ? projects[(currentIndex + 1) % projects
     display: grid;
     margin-top: clamp(5rem, 10vw, 10rem);
     align-items: end;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 2rem;
   }
 
@@ -133,14 +172,20 @@ const nextProject = projects.length > 1 ? projects[(currentIndex + 1) % projects
     font-style: italic;
   }
 
+  .project-detail__title > div {
+    min-width: 0;
+  }
+
   h1 {
     max-width: 90rem;
     margin: 0;
-    font-size: clamp(4rem, 10vw, 11rem);
+    font-size: var(--hero-title-size);
     font-weight: 600;
-    line-height: 0.88;
-    letter-spacing: -0.08em;
+    line-height: 1.15;
+    letter-spacing: -0.055em;
     word-break: keep-all;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
   .project-detail__title > span {

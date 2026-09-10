@@ -162,7 +162,7 @@ const isStacked = lines.length > 1;
     margin: 0;
     flex-direction: column;
     row-gap: 0.06em;
-    font-size: clamp(3.06rem, 7.5vw, 8.4rem);
+    font-size: var(--hero-title-size);
     font-weight: 700;
     line-height: 0.92;
     letter-spacing: 0;
@@ -295,9 +295,6 @@ const isStacked = lines.length > 1;
   }
 
   @media (max-width: 60rem) {
-    .hero__title {
-      font-size: clamp(2.88rem, 9.3vw, 5.4rem);
-    }
 
     .hero--stacked .hero__line--2 {
       margin-left: 12vw;
@@ -324,7 +321,6 @@ const isStacked = lines.length > 1;
     }
 
     .hero__title {
-      font-size: clamp(2.61rem, 12.6vw, 4.8rem);
       row-gap: 0.09em;
       line-height: 0.94;
     }
@@ -382,9 +378,4 @@ const isStacked = lines.length > 1;
     }
   }
 
-  @media (max-width: 25rem) {
-    .hero__title {
-      font-size: 11.4vw;
-    }
-  }
 </style>

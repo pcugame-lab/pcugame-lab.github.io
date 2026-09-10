@@ -4,7 +4,7 @@ titleEn: "Performance Impact Analysis of Texture Atlasing with Unity SRP Batcher
 summary: "Unity 6 환경에서 텍스처 아틀라스와 SRP Batcher의 성능 영향을 분석하였다. 현대 렌더링 성능 최적화의 핵심이 Draw Call보다 상태 변경 비용에 있음을 시사한다."
 code: "R—05"
 year: "2026"
-phase: "Completed"
+phase: "Archive"
 members:
   - "한지성"
 tags:

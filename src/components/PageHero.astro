@@ -1,0 +1,152 @@
+---
+import CoreMark from "./CoreMark.astro";
+
+interface Props {
+  index: string;
+  eyebrow: string;
+  title: string;
+  titleEn: string;
+  description: string;
+}
+
+const { index, eyebrow, title, titleEn, description } = Astro.props;
+---
+
+<section class="page-hero" id="top">
+  <div class="page-hero__inner container">
+    <div class="page-hero__meta">
+      <p>{index}</p>
+      <p>{eyebrow}</p>
+    </div>
+    <h1>{title}</h1>
+    <div class="page-hero__bottom">
+      <p class="page-hero__english">{titleEn}</p>
+      <p class="page-hero__description">{description}</p>
+    </div>
+    <CoreMark class="page-hero__mark" />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    color: var(--white);
+    background: var(--ink);
+    border-bottom: 1px solid var(--line-dark);
+    overflow: hidden;
+  }
+
+  .page-hero__inner {
+    position: relative;
+    display: grid;
+    min-height: min(49rem, calc(86svh - var(--header-height)));
+    padding-block: clamp(2rem, 5vw, 5rem) clamp(3rem, 6vw, 6rem);
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .page-hero__inner::before,
+  .page-hero__inner::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #1e1e1e;
+    content: "";
+  }
+
+  .page-hero__inner::before {
+    left: 34%;
+  }
+
+  .page-hero__inner::after {
+    left: 67%;
+  }
+
+  .page-hero__meta {
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    color: #777;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .page-hero__meta p {
+    margin: 0;
+  }
+
+  h1 {
+    z-index: 1;
+    max-width: 85rem;
+    margin: auto 0;
+    padding-block: 3rem;
+    font-size: clamp(4.8rem, 13vw, 14rem);
+    font-weight: 700;
+    line-height: 0.76;
+    letter-spacing: -0.09em;
+  }
+
+  .page-hero__bottom {
+    z-index: 1;
+    display: grid;
+    align-items: end;
+    grid-template-columns: minmax(12rem, 0.8fr) minmax(18rem, 1.2fr);
+    gap: 3rem;
+  }
+
+  .page-hero__english {
+    margin: 0;
+    color: #888;
+    font-size: clamp(1.4rem, 2.7vw, 3rem);
+    font-style: italic;
+    letter-spacing: -0.04em;
+  }
+
+  .page-hero__description {
+    max-width: 38rem;
+    margin: 0;
+    justify-self: end;
+    color: #b9b9b4;
+    font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+    line-height: 1.75;
+    word-break: keep-all;
+  }
+
+  :global(.page-hero__mark) {
+    position: absolute;
+    z-index: 0;
+    top: 16%;
+    right: 5%;
+    width: clamp(11rem, 24vw, 27rem);
+    height: clamp(11rem, 24vw, 27rem);
+    color: #242424;
+  }
+
+  @media (max-width: 48rem) {
+    .page-hero__inner {
+      min-height: 37rem;
+    }
+
+    h1 {
+      font-size: clamp(4.5rem, 23vw, 8rem);
+    }
+
+    .page-hero__bottom {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .page-hero__description {
+      justify-self: start;
+    }
+
+    :global(.page-hero__mark) {
+      top: 23%;
+      right: -16%;
+      width: 58vw;
+      height: 58vw;
+    }
+  }
+</style>

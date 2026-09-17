@@ -2,6 +2,7 @@
 name: "김승조"
 nameEn: "Kim seungjo"
 monogram: "KSJ"
+photo: "/images/members/26-seungjo.jpeg"
 interests: []
 positions:
   - year: 2026
